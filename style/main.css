@@ -1,0 +1,67 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    padding: 8px;
+
+    display: flex;
+    gap: 8px;
+
+    font-family: monospace;
+    font-weight: 100;
+}
+
+button {
+    font-family: inherit;
+    font-weight: inherit;
+    color: inherit;
+    font-size: inherit;
+
+    border-style: solid;
+    border-color: currentColor;
+    background-color: transparent;
+    border-width: 1px;
+    border-radius: 2px;
+}
+
+com-chain,
+com-module {
+    border: 1px black solid;
+    border-radius: 2px;
+}
+
+com-chain,
+com-module,
+com-list {
+    display: flex;
+    flex-direction: column;
+
+    gap: 4px;
+    padding: 4px;
+}
+
+com-module {
+    user-select: none;
+    -webkit-user-select: none;
+
+    cursor: grab;
+}
+
+[data-dragging="true"],
+[data-dragging="true"] * {
+    cursor: grabbing;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+[data-dragged="true"] {
+    color: orange;
+}
