@@ -1,0 +1,203 @@
+x-com-list,
+x-com-chain,
+x-com-module,
+x-com-paramlist {
+    display: flex;
+    flex-direction: column;
+    /* display: grid;
+    grid-auto-rows: min-content; */
+}
+
+x-com-list {
+    /* display: grid;
+    grid-auto-rows: min-content; */
+}
+
+body > x-com-list {
+    /* display: flex; */
+    flex-direction: row;
+    gap: 8px;
+}
+
+x-com-chain {
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+x-com-chain::-webkit-scrollbar {
+    background: transparent;
+    width: 6px;
+}
+
+x-com-chain::-webkit-scrollbar-thumb {
+    background: orange;
+    border-radius: 8px;
+}
+
+x-com-chain > x-com-list {
+}
+
+x-com-list,
+x-com-chain,
+x-com-module,
+x-com-out {
+    border: 1px hsla(0, 0%, 0%, var(--stroke-opacity, 0.1)) solid;
+    border-radius: 2px;
+}
+
+x-com-chain,
+x-com-module,
+x-com-out {
+    box-shadow: 0 0 16px hsla(0, 0%, 0%, 0.03);
+    background-color: hsl(0 0% 100% / var(--bg-opacity, 1));
+    gap: 4px;
+}
+
+x-com-list,
+x-com-chain,
+x-com-module,
+x-com-out {
+    padding: 2px;
+}
+
+x-com-list {
+    flex-grow: 1;
+    gap: 2px;
+
+    --bg-opacity: 0.04;
+
+    background-color: hsl(39 100% 50% / var(--bg-opacity));
+    transition: background-color 100ms ease;
+    transition-delay: 50ms;
+}
+
+x-com-module {
+    padding: 4px;
+    cursor: grab;
+    min-width: 15ch;
+    /* width: 15ch; */
+    /* height: auto; */
+    /* min-height: 7ch; */
+    /* aspect-ratio: 1/1; */
+}
+
+x-com-module > x-com-list {
+    margin-top: auto;
+    flex-grow: 0;
+
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+}
+
+x-com-out {
+    display: flex;
+    align-items: center;
+}
+x-com-out > * {
+    /* flex-grow: 1; */
+}
+
+x-com-out span {
+    font-size: 1rem;
+    /* background-color: yellow; */
+    transform: translateY(-1px);
+    flex-shrink: 0;
+    width: 1.5em;
+    aspect-ratio: 1/1;
+    display: grid;
+    place-content: center;
+    text-align: center;
+}
+
+x-com-module:not(:has(> x-com-list > x-com-out)) {
+    aspect-ratio: unset;
+}
+
+x-com-module > span {
+    /* flex-basis: 100%; */
+}
+
+x-com-paramlist:has(label) {
+    /* color: red; */
+}
+
+x-com-paramlist {
+    border-top-style: dashed;
+    border-width: 1px;
+    gap: 4px;
+    padding-block: 4px;
+}
+
+x-com-paramlist label {
+    display: flex;
+    gap: 4px;
+    /* justify-content: space-between; */
+}
+
+x-com-paramlist form {
+    display: flex;
+    gap: 4px;
+    /* justify-content: space-between; */
+}
+
+x-com-paramlist input[type="range"] {
+    /* width: 0;
+    min-width: 0; */
+}
+
+x-com-paramlist label span {
+    /* flex-basis: 100%; */
+    flex-basis: 4ch;
+    /* flex-grow: 0;
+    flex-shrink: 1; */
+}
+
+x-com-paramlist input {
+    flex-grow: 1;
+    /* max-width: 8ch; */
+    /* width: 0; */
+    /* min-width: 0; */
+    /* flex-basis: 0%; */
+    /* flex-grow: 1; */
+    /* text-align: center; */
+}
+
+x-com-module,
+x-com-module * {
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.dragging {
+    color: cornflowerblue;
+    --bg-opacity: 1;
+    border-color: currentColor;
+}
+
+html[data-dragging="true"],
+html[data-dragging="true"] * {
+}
+
+/* [draggable="true"]:active {
+    cursor: grabbing;
+    color: orange;
+} */
+
+html.X-COM-MODULE x-com-chain > x-com-list,
+html.X-COM-OUT x-com-module > x-com-list {
+    --bg-opacity: 0.15;
+    transition-delay: 0ms;
+}
+
+:where(x-com-chain, x-com-module, x-com-out) {
+    /* opacity: 0.875; */
+    --bg-opacity: 0.5;
+    --stroke-opacity: 0.1;
+}
+
+:where(x-com-chain, x-com-module, x-com-out):hover {
+    --bg-opacity: 1;
+    --stroke-opacity: 0.15;
+    /* outline: 1px hsl(0 100% 50% / 0.1) solid;
+    outline-offset: 2px; */
+}

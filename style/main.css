@@ -1,3 +1,5 @@
+@import "./range.css";
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -17,51 +19,32 @@ body {
 
     font-family: monospace;
     font-weight: 100;
+    color: #000;
+
+    overflow: hidden;
 }
 
 button {
+    cursor: pointer;
     font-family: inherit;
     font-weight: inherit;
     color: inherit;
     font-size: inherit;
 
     border-style: solid;
-    border-color: currentColor;
-    background-color: transparent;
+    border-color: transparent;
+    background-color: orange;
     border-width: 1px;
     border-radius: 2px;
 }
-
-com-chain,
-com-module {
-    border: 1px black solid;
-    border-radius: 2px;
+button:hover {
+    border-color: orange;
+    background-color: transparent;
 }
 
-com-chain,
-com-module,
-com-list {
-    display: flex;
-    flex-direction: column;
-
-    gap: 4px;
-    padding: 4px;
-}
-
-com-module {
-    user-select: none;
-    -webkit-user-select: none;
-
-    cursor: grab;
-}
-
-[data-dragging="true"],
-[data-dragging="true"] * {
-    cursor: grabbing;
-    user-select: none;
-    -webkit-user-select: none;
-}
-
-[data-dragged="true"] {
-    color: orange;
+input,
+select {
+    font-family: inherit;
+    color: inherit;
+    font-weight: inherit;
 }

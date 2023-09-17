@@ -1,78 +1,115 @@
-import { COMChain } from "./src/chain.js";
-import { attach_root } from "./src/interact/index.js";
-import { COMModule } from "./src/module.js";
-import { signal_to_intercom } from "./src/signal.js";
+import {
+    _COMChain,
+    COMList,
+    _COMModule,
+    _COMOut,
+    com_out_list,
+} from "./src/el.js";
 
-window.customElements.define("com-chain", COMChain);
-window.customElements.define("com-module", COMModule);
+customElements.define("x-com-list", COMList);
+customElements.define("x-com-chain", _COMChain);
+customElements.define("x-com-module", _COMModule);
+customElements.define("x-com-out", _COMOut);
 
-const chain0 = document.createElement("com-chain");
-const chain1 = document.createElement("com-chain");
-document.body.append(chain0, chain1);
+const networkList = document.createElement("x-com-list");
 
-chain0.add_module("LFO");
-chain0.add_module();
-chain0.add_module();
+const c0 = document.createElement("x-com-chain");
+const c1 = document.createElement("x-com-chain");
 
-chain1.add_module();
-chain1.add_module("LFO");
-chain1.add_module();
+document.body.appendChild(networkList);
+networkList.append(c0, c1);
 
-attach_root(document.body);
+const c0m0 = c0.addModule("LFO");
+c0m0.addOut();
 
-/**@type {COMModule | HTMLElement} */
-let dragged_element;
-/**@type {COMChain | HTMLElement} */
-let dragged_chain;
-let dragged_chain_idx = -1;
-let dragged_idx = -1;
+const c0m1 = c0.addModule();
+c0m1.addOut();
 
-document.body.addEventListener("interact-root:down", (e) => {
-    document.body.setAttribute("data-dragging", "true");
+c0.addModule();
+c0.addModule();
 
-    dragged_element = e.detail.interactSource;
-    dragged_element.setAttribute("data-dragged", "true");
+c1.addModule();
+c1.addModule();
+c1.addModule();
+const c1m2 = c1.addModule();
+c1m2.addOut();
+c1m2.addOut();
+c1m2.addOut();
+c1m2.addOut();
 
-    dragged_chain = e.detail.sections["chain"];
-    dragged_chain_idx = dragged_chain.index;
+const start = {
+    cIdx: -1,
+    mIdx: -1,
+    oIdx: -1,
+};
 
-    dragged_idx = dragged_element.index;
-});
+const end = {
+    cIdx: -1,
+    mIdx: -1,
+    oIdx: -1,
+};
 
-document.body.addEventListener("interact-root:up", (e) => {
-    document.body.removeAttribute("data-dragging");
-
-    if (dragged_element) {
-        dragged_element.removeAttribute("data-dragged");
-        dragged_element = null;
-        dragged_idx = -1;
-
-        dragged_chain = null;
-        dragged_chain_idx = -1;
+/**
+ *
+ * @param {NodeListOf<HTMLElement> | HTMLCollection} children
+ * @param {HTMLElement} child
+ */
+function getChildIndex(children, child) {
+    let i = 0;
+    for (const _child of children) {
+        if (_child == child) break;
+        i++;
     }
-});
+    return i;
+}
 
-document.body.addEventListener("interact-root:enter", (e) => {
-    if (!dragged_element) return;
-    if (dragged_element == e.detail.interactSource) return;
+/**@param {import("./src/interact/drag.js").HTMLDragEvent<DragEvent>} e */
+function startHandler(e) {
+    const chain = e.target.closest("x-com-chain");
+    const chainList = chain.closest("x-com-list");
 
-    const i = e.detail.interactSource.index;
+    const module = e.target;
+    const moduleList = e.target.closest("x-com-list");
 
-    /**@type {InsertPosition} */
-    let insertPosition = "beforebegin";
-    if (i > dragged_idx) {
-        insertPosition = "afterend";
+    start.cIdx = getChildIndex(chainList.children, chain);
+    start.mIdx = getChildIndex(moduleList.children, module);
+
+    if (e.target.tagName == "X-COM-OUT") {
+        const out = e.target;
+        start.oIdx = out.index;
+    }
+}
+
+/**@param {import("./src/interact/drag.js").HTMLDragEvent<DragEvent>} e */
+function endHandler(e) {
+    const chain = e.target.closest("x-com-chain");
+    const chainList = chain.closest("x-com-list");
+
+    const module = e.target;
+    const moduleList = e.target.closest("x-com-list");
+
+    end.cIdx = getChildIndex(chainList.children, chain);
+    end.mIdx = getChildIndex(moduleList.children, module);
+
+    if (e.target.tagName == "X-COM-OUT") {
+        const out = e.target;
+
+        com_out_list.delete(e.target);
+        com_out_list.add(e.target);
+
+        let i = 0;
+        com_out_list.forEach((o) => {
+            // console.log(o, i);
+            o.index = i;
+            i++;
+        });
+
+        end.oIdx = out.index;
     }
 
-    const chain_idx = e.detail.sections["chain"].index;
+    // console.log(start);
+    // console.log(end);
+}
 
-    signal_to_intercom(`c ${dragged_chain_idx} -r m ${dragged_idx}`);
-    signal_to_intercom(`c ${chain_idx} -a m ${i}`);
-
-    e.detail.interactSource.insertAdjacentElement(
-        insertPosition,
-        dragged_element
-    );
-
-    dragged_idx = i;
-});
+document.body.addEventListener("dragstart", startHandler);
+document.body.addEventListener("dragend", endHandler);

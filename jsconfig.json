@@ -2,6 +2,6 @@
     "compilerOptions": {
         "target": "ES6",
         "checkJs": true,
-        "lib": ["ES6", "DOM"]
+        "lib": ["ES6", "DOM", "DOM.Iterable"]
     }
 }
