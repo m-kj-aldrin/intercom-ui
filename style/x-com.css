@@ -51,6 +51,9 @@ x-com-out {
     box-shadow: 0 0 16px hsla(0, 0%, 0%, 0.03);
     background-color: hsl(0 0% 100% / var(--bg-opacity, 1));
     gap: 4px;
+    transition-property: background-color, border;
+    transition-duration: 200ms;
+    transition-timing-function: ease;
 }
 
 x-com-list,
@@ -86,18 +89,28 @@ x-com-module > x-com-list {
     flex-grow: 0;
 
     display: grid;
-    grid-template-columns: repeat(2,1fr);
+    grid-template-columns: repeat(3, 1fr);
 }
 
 x-com-out {
     display: flex;
     align-items: center;
+    /* justify-content: space-between; */
+    font-size: 0.5em;
+    padding: 0;
+    gap: 0;
 }
 x-com-out > * {
     /* flex-grow: 1; */
 }
 
+x-com-out ul{
+    display: flex;
+    flex-direction: column;
+}
+
 x-com-out span {
+    flex-grow: 1;
     font-size: 1rem;
     /* background-color: yellow; */
     transform: translateY(-1px);
@@ -189,15 +202,19 @@ html.X-COM-OUT x-com-module > x-com-list {
     transition-delay: 0ms;
 }
 
+html.X-COM-MODULE :where(x-com-chain, x-com-module, x-com-out) {
+    --bg-opacity: 1;
+}
+
 :where(x-com-chain, x-com-module, x-com-out) {
     /* opacity: 0.875; */
-    --bg-opacity: 0.5;
+    --bg-opacity: 0.3;
     --stroke-opacity: 0.1;
 }
 
 :where(x-com-chain, x-com-module, x-com-out):hover {
     --bg-opacity: 1;
-    --stroke-opacity: 0.15;
+    --stroke-opacity: 0.2;
     /* outline: 1px hsl(0 100% 50% / 0.1) solid;
     outline-offset: 2px; */
 }

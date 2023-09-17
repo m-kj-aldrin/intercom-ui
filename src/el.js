@@ -92,7 +92,13 @@ const MODULE_TYPES = {
         ],
     },
     CHA: {
-        parameters: [],
+        parameters: [
+            {
+                name: "CHNS",
+                type: "number",
+                default: 0.5,
+            },
+        ],
     },
 };
 
@@ -189,6 +195,7 @@ export class _COMOut extends COMBase {
         <span>
             &DownTeeArrow;
         </span>
+        <ul>
         <select>
             <option value="0">0</option>
             <option value="1">1</option>
@@ -211,6 +218,7 @@ export class _COMOut extends COMBase {
             <option value="7">7</option>
             <option value="8">8</option>
         </select>
+        </ul>
         `;
 
         com_out_list.add(this);
