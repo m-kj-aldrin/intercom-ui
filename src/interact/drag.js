@@ -44,26 +44,13 @@ export function draggable(target) {
  * @param {number} y
  * @param {number} [x]
  */
-function getClosest(children, y, x) {
+function getClosest(children, y) {
     let closestElement = null;
     let closestoffsetY = Number.NEGATIVE_INFINITY;
-    // let closestoffsetX = Number.NEGATIVE_INFINITY;
-
-    // let smallest = Number.POSITIVE_INFINITY;
 
     for (const child of children) {
         const childBox = child.getBoundingClientRect();
         const offsetY = y - childBox.top - childBox.height / 2;
-        // const offsetX = x - childBox.left - childBox.width / 2;
-
-        // const distance = Math.sqrt(offsetX ** 2 + offsetY ** 2);
-
-        // console.log(distance);
-
-        // if (distance < smallest ) {
-        //     closestElement = child;
-        //     smallest = distance;
-        // }
 
         if (offsetY < 0 && offsetY > closestoffsetY) {
             closestElement = child;
@@ -101,25 +88,18 @@ function dragOver(selector, acceptList, nosort = false) {
             `${selector}:not(.dragging)`
         );
 
-        // console.log(e.clientX, e.clientY);
-
         let closest = null;
         if (!nosort) {
-            closest = getClosest(children, e.clientY, e.clientX);
+            closest = getClosest(children, e.clientY);
         }
 
-        const fromChain = dragged.closest("com-chain");
-        // const fromList = fromChain.querySelector("com-list");
-        const fromList = dragged.closest("com-list");
+        const fromList = dragged.parentElement;
         const toList = e.currentTarget.querySelector("com-list");
 
         const F = flip([
             ...toList.children,
             ...(fromList != toList ? fromList.children : []),
         ]);
-
-        // console.log(fromList);
-        // console.log(fromList.children);
 
         if (closest == null) {
             if (dragged == toList.lastElementChild) return;

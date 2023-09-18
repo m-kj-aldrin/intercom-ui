@@ -1,5 +1,5 @@
 import { getChildIndex } from "../dom/util.js";
-import { com_out_list } from "../elements/out.js";
+import COMOut, { com_out_list } from "../elements/out.js";
 
 const start = {
     cIdx: -1,
@@ -24,7 +24,7 @@ function startHandler(e) {
     start.cIdx = getChildIndex(chainList.children, chain);
     start.mIdx = getChildIndex(moduleList.children, module);
 
-    if (e.target.tagName == "COM-OUT") {
+    if (e.target instanceof COMOut) {
         const out = e.target;
         start.oIdx = out.index;
     }
@@ -41,7 +41,7 @@ function endHandler(e) {
     end.cIdx = getChildIndex(chainList.children, chain);
     end.mIdx = getChildIndex(moduleList.children, module);
 
-    if (e.target.tagName == "COM-OUT") {
+    if (e.target instanceof COMOut) {
         const out = e.target;
 
         com_out_list.delete(e.target);
@@ -49,7 +49,6 @@ function endHandler(e) {
 
         let i = 0;
         com_out_list.forEach((o) => {
-            // console.log(o, i);
             o.index = i;
             i++;
         });

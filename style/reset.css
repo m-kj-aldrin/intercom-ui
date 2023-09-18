@@ -29,3 +29,18 @@ select {
     color: inherit;
     font-weight: inherit;
 }
+
+select {
+    appearance: none;
+    background-color: transparent;
+    border: none;
+
+    cursor: pointer;
+
+    border-radius: 1px;
+
+    border-bottom: 1px currentColor solid;
+
+    padding-block: 2px;
+    padding-inline: 8px;
+}

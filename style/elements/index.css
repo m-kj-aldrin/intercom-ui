@@ -83,22 +83,21 @@ com-out {
 
     font-size: 0.5em;
     padding: 0;
-    gap: 0;
+    gap: 2px;
+    padding: 4px;
 }
 
 com-out ul {
     display: flex;
     flex-direction: column;
+    gap: 2px;
 }
 
 com-out span {
     flex-grow: 1;
     font-size: 1rem;
 
-    transform: translateY(-1px);
-    flex-shrink: 0;
-    width: 1.5em;
-    aspect-ratio: 1/1;
+    padding-inline: 0.5em;
     display: grid;
     place-content: center;
     text-align: center;
@@ -145,13 +144,13 @@ com-module * {
     border-color: currentColor;
 }
 
-html.cOM-MODULE com-chain > com-list,
-html.cOM-OUT com-module > com-list {
+html.COM-MODULE com-chain > com-list,
+html.COM-OUT com-module > com-list {
     --bg-opacity: 0.15;
     transition-delay: 0ms;
 }
 
-html.cOM-MODULE :where(com-chain, com-module, com-out) {
+html:where(.COM-MODULE, .COM-OUT) :where(com-chain, com-module, com-out) {
     --bg-opacity: 1;
 }
 
