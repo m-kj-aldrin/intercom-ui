@@ -1,6 +1,7 @@
 input[type="range"] {
     cursor: pointer;
     -webkit-appearance: none;
+    background-color: transparent;
 }
 
 input[type="range"]:active {
@@ -26,7 +27,6 @@ input[type="range"]::-webkit-slider-thumb {
 }
 
 input[type="range"]:active::-webkit-slider-thumb {
-    /* color: cornflowerblue; */
 }
 
 input[type="range"]::-moz-range-track {
