@@ -1,0 +1,17 @@
+html,
+body {
+    height: 100%;
+}
+
+body {
+    padding: 8px;
+
+    display: flex;
+    gap: 8px;
+
+    font-family: monospace;
+    font-weight: 100;
+    color: #000;
+
+    overflow: hidden;
+}

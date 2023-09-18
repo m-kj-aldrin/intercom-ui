@@ -1,0 +1,166 @@
+com-list,
+com-chain,
+com-module,
+com-paramlist {
+    display: flex;
+    flex-direction: column;
+}
+
+body > com-list {
+    flex-direction: row;
+    gap: 8px;
+}
+
+com-chain {
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+com-chain::-webkit-scrollbar {
+    background: transparent;
+    width: 6px;
+}
+
+com-chain::-webkit-scrollbar-thumb {
+    background: orange;
+    border-radius: 8px;
+}
+
+com-list,
+com-chain,
+com-module,
+com-out {
+    border: 1px hsla(0, 0%, 0%, var(--stroke-opacity, 0.1)) solid;
+    border-radius: 2px;
+}
+
+com-chain,
+com-module,
+com-out {
+    box-shadow: 0 0 16px hsla(0, 0%, 0%, 0.03);
+    background-color: hsl(0 0% 100% / var(--bg-opacity, 1));
+    gap: 4px;
+    transition-property: background-color, border;
+    transition-duration: 200ms;
+    transition-timing-function: ease;
+}
+
+com-list,
+com-chain,
+com-module,
+com-out {
+    padding: 2px;
+}
+
+com-list {
+    flex-grow: 1;
+    gap: 2px;
+
+    --bg-opacity: 0.04;
+
+    background-color: hsl(39 100% 50% / var(--bg-opacity));
+    transition: background-color 100ms ease;
+    transition-delay: 50ms;
+}
+
+com-module {
+    padding: 4px;
+    cursor: grab;
+    min-width: 15ch;
+}
+
+com-module > com-list {
+    margin-top: auto;
+    flex-grow: 0;
+
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+com-out {
+    display: flex;
+    align-items: center;
+
+    font-size: 0.5em;
+    padding: 0;
+    gap: 0;
+}
+
+com-out ul {
+    display: flex;
+    flex-direction: column;
+}
+
+com-out span {
+    flex-grow: 1;
+    font-size: 1rem;
+
+    transform: translateY(-1px);
+    flex-shrink: 0;
+    width: 1.5em;
+    aspect-ratio: 1/1;
+    display: grid;
+    place-content: center;
+    text-align: center;
+}
+
+com-module:not(:has(> com-list > com-out)) {
+    aspect-ratio: unset;
+}
+
+com-paramlist {
+    border-top-style: dashed;
+    border-width: 1px;
+    gap: 4px;
+    padding-block: 4px;
+}
+
+com-paramlist label {
+    display: flex;
+    gap: 4px;
+}
+
+com-paramlist form {
+    display: flex;
+    gap: 4px;
+}
+
+com-paramlist label span {
+    flex-basis: 4ch;
+}
+
+com-paramlist input {
+    flex-grow: 1;
+}
+
+com-module,
+com-module * {
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.dragging {
+    color: cornflowerblue;
+    --bg-opacity: 1;
+    border-color: currentColor;
+}
+
+html.cOM-MODULE com-chain > com-list,
+html.cOM-OUT com-module > com-list {
+    --bg-opacity: 0.15;
+    transition-delay: 0ms;
+}
+
+html.cOM-MODULE :where(com-chain, com-module, com-out) {
+    --bg-opacity: 1;
+}
+
+:where(com-chain, com-module, com-out) {
+    --bg-opacity: 0.3;
+    --stroke-opacity: 0.1;
+}
+
+:where(com-chain, com-module, com-out):hover {
+    --bg-opacity: 1;
+    --stroke-opacity: 0.2;
+}

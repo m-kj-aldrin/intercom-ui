@@ -1,22 +1,18 @@
-import { COMChain } from "./src/chain";
+import COMChain from "./src/elements/chain";
+import COMList from "./src/elements/list";
+import COMModule from "./src/elements/module";
+import { COMOut } from "./src/elements/out";
+import COMParameter from "./src/elements/parameter";
 import { InteractRootEvent } from "./src/interact/index";
-import { COMModule } from "./src/module";
-import { COMList, _COMChain, _COMModule, _COMOut } from "./src/el";
 
 declare global {
     interface HTMLElementTagNameMap {
+        "com-list": COMList;
         "com-chain": COMChain;
         "com-module": COMModule;
-
-        "x-com-list": COMList;
-        "x-com-chain": _COMChain;
-        "x-com-module": _COMModule;
-        "x-com-out": _COMOut;
+        "com-out": COMOut;
+        "com-parameter": COMParameter;
     }
 
-    interface HTMLElementEventMap {
-        "interact-root:down": InteractRootEvent<{}>;
-        "interact-root:enter": InteractRootEvent<{}>;
-        "interact-root:up": InteractRootEvent<{}>;
-    }
+    interface HTMLElementEventMap {}
 }

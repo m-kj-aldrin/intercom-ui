@@ -88,8 +88,8 @@ function dragOver(selector, acceptList, nosort = false) {
 
         if (
             nosort &&
-            e.currentTarget.querySelector("x-com-list") ==
-                dragged.closest("x-com-list")
+            e.currentTarget.querySelector("com-list") ==
+                dragged.closest("com-list")
         ) {
             return;
         }
@@ -108,10 +108,10 @@ function dragOver(selector, acceptList, nosort = false) {
             closest = getClosest(children, e.clientY, e.clientX);
         }
 
-        const fromChain = dragged.closest("x-com-chain");
-        // const fromList = fromChain.querySelector("x-com-list");
-        const fromList = dragged.closest("x-com-list");
-        const toList = e.currentTarget.querySelector("x-com-list");
+        const fromChain = dragged.closest("com-chain");
+        // const fromList = fromChain.querySelector("com-list");
+        const fromList = dragged.closest("com-list");
+        const toList = e.currentTarget.querySelector("com-list");
 
         const F = flip([
             ...toList.children,
