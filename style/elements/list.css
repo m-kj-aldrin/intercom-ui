@@ -1,0 +1,10 @@
+com-list {
+    flex-grow: 1;
+    gap: 2px;
+
+    --bg-opacity: 0.04;
+
+    background-color: hsl(var(--color) / var(--bg-opacity));
+    transition: background-color 100ms ease;
+    transition-delay: 50ms;
+}

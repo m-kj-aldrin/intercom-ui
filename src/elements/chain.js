@@ -3,7 +3,7 @@ import COMBase from "./base.js";
 
 /**@param {COMChain} self */
 const template = (self) => `
-<com-list data-type="chain">
+<com-list data-type="chain" should-index="true">
 </com-list>
 `;
 
@@ -36,5 +36,15 @@ export default class COMChain extends COMBase {
 
     get modules() {
         return this._modules;
+    }
+
+    /**@param {number} v */
+    set index(v) {
+        if (typeof v != "number") return;
+        this._index = v;
+    }
+
+    get index() {
+        return this._index;
     }
 }

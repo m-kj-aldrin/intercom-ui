@@ -1,0 +1,13 @@
+com-module {
+    padding: 4px;
+    cursor: grab;
+    min-width: 15ch;
+}
+
+com-module > com-list {
+    margin-top: auto;
+    flex-grow: 0;
+
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}

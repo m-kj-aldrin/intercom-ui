@@ -1,0 +1,15 @@
+com-chain {
+    overflow-y: auto;
+    overflow-x: hidden;
+    --color: var(--color-prim);
+}
+
+com-chain::-webkit-scrollbar {
+    background: transparent;
+    width: 6px;
+}
+
+com-chain::-webkit-scrollbar-thumb {
+    background: orange;
+    border-radius: 8px;
+}

@@ -1,0 +1,33 @@
+body > com-list {
+    flex-direction: row;
+    gap: 8px;
+}
+
+com-list,
+com-chain,
+com-module,
+com-paramlist {
+    display: flex;
+    flex-direction: column;
+}
+
+com-list,
+com-chain,
+com-module,
+com-out {
+    border: 1px hsla(0, 0%, 0%, var(--stroke-opacity, 0.1)) solid;
+    border-radius: 2px;
+    padding: 2px;
+}
+
+com-chain,
+com-module,
+com-out {
+    box-shadow: 0 0 16px hsla(0, 0%, 0%, 0.03);
+    background-color: hsl(0 0% 100% / var(--bg-opacity, 1));
+
+    gap: 4px;
+    transition-property: background-color, border;
+    transition-duration: 200ms;
+    transition-timing-function: ease;
+}

@@ -2,6 +2,7 @@ import "./src/elements/index.js";
 import "./src/com/signal.js";
 
 const networkList = document.createElement("com-list");
+networkList.setAttribute("should-index", "true");
 
 const c0 = document.createElement("com-chain");
 const c1 = document.createElement("com-chain");

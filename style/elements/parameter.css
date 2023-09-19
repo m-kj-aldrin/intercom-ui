@@ -1,0 +1,24 @@
+com-paramlist {
+    border-top-style: dashed;
+    border-width: 1px;
+    gap: 4px;
+    padding-block: 4px;
+}
+
+com-paramlist label {
+    display: flex;
+    gap: 4px;
+}
+
+com-paramlist form {
+    display: flex;
+    gap: 4px;
+}
+
+com-paramlist label span {
+    flex-basis: 4ch;
+}
+
+com-paramlist input {
+    flex-grow: 1;
+}

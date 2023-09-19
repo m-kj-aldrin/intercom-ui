@@ -54,20 +54,24 @@ function buildParameter(pa) {
 }
 
 /**@param {COMModule} self */
-const template = (self) => `
-<span>${self.type}</span>
-${
-    self.type != "PTH"
-        ? `
-<com-paramlist>
-${MODULE_TYPES[self.type].parameters?.map(buildParameter).join("\n")}
-</com-paramlist>
-`
-        : ""
-} 
-<com-list>
-</com-list>
+const template = (self) => {
+    let paramString = "";
+
+    if (self.type != "PTH") {
+        paramString = `
+        <com-paramlist>
+        ${MODULE_TYPES[self.type].parameters.map(buildParameter).join("\n")}
+        </com-paramlist>
+    `;
+    }
+
+    return `
+        <span>${self.type}</span> 
+        ${paramString}
+        <com-list>
+        </com-list>
 `;
+};
 
 export default class COMModule extends COMBase {
     constructor() {
@@ -86,5 +90,14 @@ export default class COMModule extends COMBase {
         newOut.index = document.querySelectorAll("com-out").length;
         draggable(newOut);
         this.querySelector("com-list").appendChild(newOut);
+    }
+
+    set index(v) {
+        if (typeof v != "number") return;
+        this._index = v;
+    }
+
+    get index() {
+        return this._index;
     }
 }

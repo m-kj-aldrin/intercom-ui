@@ -1,5 +1,4 @@
-import { getChildIndex } from "../dom/util.js";
-import COMOut, { com_out_list } from "../elements/out.js";
+import COMOut from "../elements/out.js";
 
 const start = {
     cIdx: -1,
@@ -16,13 +15,11 @@ const end = {
 /**@param {import("../interact/drag.js").HTMLDragEvent<DragEvent>} e */
 function startHandler(e) {
     const chain = e.target.closest("com-chain");
-    const chainList = chain.closest("com-list");
 
-    const module = e.target;
-    const moduleList = e.target.closest("com-list");
+    const module = e.target.closest("com-module");
 
-    start.cIdx = getChildIndex(chainList.children, chain);
-    start.mIdx = getChildIndex(moduleList.children, module);
+    start.cIdx = chain.index;
+    start.mIdx = module.index;
 
     if (e.target instanceof COMOut) {
         const out = e.target;
@@ -33,27 +30,15 @@ function startHandler(e) {
 /**@param {import("../interact/drag.js").HTMLDragEvent<DragEvent>} e */
 function endHandler(e) {
     const chain = e.target.closest("com-chain");
-    const chainList = chain.closest("com-list");
 
-    const module = e.target;
-    const moduleList = e.target.closest("com-list");
+    const module = e.target.closest("com-module");
 
-    end.cIdx = getChildIndex(chainList.children, chain);
-    end.mIdx = getChildIndex(moduleList.children, module);
+    end.cIdx = chain.index;
+    end.mIdx = module.index;
 
     if (e.target instanceof COMOut) {
-        const out = e.target;
-
-        com_out_list.delete(e.target);
-        com_out_list.add(e.target);
-
-        let i = 0;
-        com_out_list.forEach((o) => {
-            o.index = i;
-            i++;
-        });
-
-        end.oIdx = out.index;
+        COMOut.updateIndices(e.target);
+        end.oIdx = e.target.index;
     }
 
     console.log(start);
