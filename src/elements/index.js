@@ -9,3 +9,5 @@ customElements.define("com-chain", COMChain);
 customElements.define("com-module", COMModule);
 customElements.define("com-out", COMOut);
 customElements.define("com-parameter", COMParameter);
+
+/** @typedef {COMChain | COMModule | COMOut | COMParameter} COMUnion */

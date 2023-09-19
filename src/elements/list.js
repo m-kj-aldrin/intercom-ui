@@ -14,6 +14,11 @@ function indexer(mutations) {
     });
 }
 
+/**
+ * @template {HTMLElement} T
+ * @typedef {T} ExtendsHTMLElement
+ */
+
 export default class COMList extends COMBase {
     static get observedAttributes() {
         return ["should-index"];
@@ -47,5 +52,24 @@ export default class COMList extends COMBase {
 
                 break;
         }
+    }
+
+    moveElement() {}
+
+    /**
+     * @template {HTMLElement} T
+     * @param {T} toAppend
+     */
+    appendElement(toAppend) {
+        this.appendChild(toAppend);
+    }
+
+    /**
+     * @template {HTMLElement} T
+     * @param {T} toInsert
+     * @param {T} target
+     */
+    insertElement(toInsert, target) {
+        this.insertBefore(toInsert, target);
     }
 }

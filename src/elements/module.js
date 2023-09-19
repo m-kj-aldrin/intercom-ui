@@ -83,13 +83,16 @@ export default class COMModule extends COMBase {
         this.template = template.bind(null, this);
 
         dragZone(this, "com-out", ["COM-OUT"], true);
+
+        this.addEventListener("change", (e) => {});
     }
 
     addOut() {
         const newOut = document.createElement("com-out");
         newOut.index = document.querySelectorAll("com-out").length;
         draggable(newOut);
-        this.querySelector("com-list").appendChild(newOut);
+
+        this.querySelector("com-list").appendElement(newOut);
     }
 
     set index(v) {

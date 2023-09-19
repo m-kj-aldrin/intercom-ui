@@ -7,7 +7,7 @@ import flip from "./flip.js";
  */
 
 /**
- * @template {DragEvent} T
+ * @template {DragEvent | InputEvent} T
  * @typedef {T & HTMLTarget} HTMLDragEvent
  */
 
@@ -71,6 +71,7 @@ function dragOver(selector, acceptList, nosort = false) {
     return function (e) {
         e.preventDefault();
 
+        /**@type {HTMLElement} */
         const dragged = document.querySelector(".dragging");
 
         if (
@@ -103,10 +104,9 @@ function dragOver(selector, acceptList, nosort = false) {
 
         if (closest == null) {
             if (dragged == toList.lastElementChild) return;
-            console.log(closest);
             toList.appendChild(dragged);
         } else if (closest.previousElementSibling != dragged) {
-            toList.insertBefore(dragged, closest);
+            toList.insertElement(dragged, closest);
         }
 
         F.play();

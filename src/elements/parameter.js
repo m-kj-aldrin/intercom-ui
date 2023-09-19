@@ -18,5 +18,9 @@ export default class COMParameter extends COMBase {
         this.value = 0;
 
         this.template = template;
+
+        this.addEventListener("change", (e) => {
+            console.log(e);
+        });
     }
 }
