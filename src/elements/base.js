@@ -10,6 +10,19 @@ export default class COMBase extends HTMLElement {
     render() {
         this.innerHTML = this.template();
     }
+    remove() {
+        this.dispatchEvent(
+            new CustomEvent("com:element", {
+                bubbles: true,
+                detail: {
+                    target: this,
+                    action: "remove",
+                },
+            })
+        );
+
+        this.parentElement.removeChild(this);
+    }
 
     connectedCallback() {
         if (!this.attached) {

@@ -1,5 +1,6 @@
 import "./src/elements/index.js";
 import "./src/com/signal.js";
+import "./src/interact/menu.js";
 
 const networkList = document.createElement("com-list");
 networkList.setAttribute("should-index", "true");
@@ -30,3 +31,9 @@ c1m2.addOut();
 c1m2.addOut();
 c1m2.addOut();
 c1m2.addOut();
+
+// c0.querySelector("com-list").appendElement(c1m2);
+
+// setTimeout(() => {
+//     c0.querySelector("com-list").insertElement(c1m2, c0m0);
+// }, 100);

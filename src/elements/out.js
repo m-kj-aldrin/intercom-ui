@@ -44,12 +44,14 @@ export default class COMOut extends COMBase {
 
         this.template = template.bind(null, this);
 
+        // console.log("out constructor", this);
         com_out_list.add(this);
     }
 
     /**@param {number} v */
     set index(v) {
         if (typeof v != "number") return;
+        // console.log(v);
         this._index = v;
     }
 

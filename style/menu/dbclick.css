@@ -1,0 +1,10 @@
+.target-for-deletion {
+    color: rgb(230, 47, 47);
+
+    background-color: hsl(0 100% 50% / 0.1);
+}
+
+.target-for-add {
+    color: rgb(21, 192, 21);
+    background-color: hsla(94, 75%, 50%, 0.1);
+}

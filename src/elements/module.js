@@ -42,11 +42,13 @@ const MODULE_TYPES = {
 /**
  * @param {param} pa
  */
-function buildParameter(pa) {
+function buildParameter(pa, i) {
     return `
     <form draggable="true" ondragstart="event.preventDefault()">
         <span>${pa.name}</span>
-        <input name="${pa.name}" type="range" min="0" max="1" step="0.001"
+        <input data-param-index="${i}" name="${
+        pa.name
+    }" type="range" min="0" max="1" step="0.001"
         data-paramtype="${pa.type}" value="${pa?.value || pa.default}"
         oninput="result.value = (+event.target.value).toFixed(4)">
         <output name="result">${(pa.value || pa.default).toFixed(4)}</output>
@@ -93,12 +95,15 @@ export default class COMModule extends COMBase {
         attachActionHook(this, "module");
     }
 
-    addOut() {
+    /**@param {boolean} signal */
+    addOut(signal = false) {
         const newOut = document.createElement("com-out");
         newOut.index = document.querySelectorAll("com-out").length;
         draggable(newOut);
 
-        this.querySelector("com-list").appendElement(newOut);
+        // console.log("calling addOut", this);
+
+        this.querySelector("com-list").appendElement(newOut, signal);
     }
 
     set index(v) {

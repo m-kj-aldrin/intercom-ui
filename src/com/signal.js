@@ -1,4 +1,5 @@
 import COMChain from "../elements/chain.js";
+import { extractContext } from "../elements/list.js";
 import COMModule from "../elements/module.js";
 import COMOut from "../elements/out.js";
 import COMParameter from "../elements/parameter.js";
@@ -44,6 +45,8 @@ function endHandler(e) {
         end.oIdx = e.target.index;
     }
 
+    signal_to_intercom(signalRemove(start)());
+
     if (e.target.nextElementSibling) {
         signal_to_intercom(signalInsert(e.target)(chain, module));
     } else {
@@ -78,11 +81,10 @@ export function signal_to_intercom(value) {
  */
 function signalInsert(element) {
     if (element instanceof COMModule) {
-        return (parent) => `I c ${parent.index} m ${element.index}`;
+        return (parent) => `c ${parent.index} m ${element.index} -i`;
     }
     if (element instanceof COMOut) {
-        return (parent, module) =>
-            `I c ${parent.index} m ${module.index} o ${element.index}`;
+        return (parent, module) => `c ${parent.index} m ${module.index} o -i`;
     }
 }
 
@@ -91,14 +93,21 @@ function signalInsert(element) {
  */
 function signalAppend(element) {
     if (element instanceof COMChain) {
-        return () => `A c ${element.index}`;
+        return () => `c ${element.index} -a`;
     }
     if (element instanceof COMModule) {
-        return (parent) => `A c ${parent.index} m ${element.index}`;
+        return (parent) => `c ${parent.index} m ${element.index} -a`;
     }
     if (element instanceof COMOut) {
-        return (parent, module) =>
-            `A c ${parent.index} m ${module.index} o ${element.index}`;
+        return (parent, module) => `c ${parent.index} m ${module.index} o -a`;
+    }
+}
+
+function signalRemove(context) {
+    if (context?.oIdx == -1) {
+        return () => `c ${context.cIdx} m ${context.mIdx} -r`;
+    } else {
+        return () => `o ${context.oIdx} -r`;
     }
 }
 
@@ -108,7 +117,9 @@ function signalAppend(element) {
  */
 function signalParameterChange(param) {
     return (chain, module) =>
-        `c ${chain.index} m ${module.index} ${param.value}`;
+        `c ${chain.index} m ${module.index} [ ${param.getAttribute(
+            "data-param-index"
+        )} , ${param.value} ]`;
 }
 
 /**
@@ -122,7 +133,30 @@ function elementActionHandler(e) {
             signal_to_intercom(signalAppend(target)(chain, module));
             break;
         case "insert":
-            signal_to_intercom(signalInsert(target)(chain, module));
+            // signal_to_intercom(signalInsert(target)(chain, module));
+            break;
+        case "remove":
+            if (e.target instanceof COMOut) {
+                signal_to_intercom(
+                    signalRemove({
+                        mIdx: e.detail.module?.index,
+                        cIdx: e.detail.chain?.index,
+                        oIdx: e.target.index,
+                    })()
+                );
+                return;
+            }
+
+            signal_to_intercom(
+                signalRemove({
+                    mIdx: e.target.index,
+                    cIdx: e.detail.chain?.index,
+                    oIdx: -1,
+                })()
+            );
+            // console.log("r", e.detail.chain.index, e.detail.target.index);
+            // console.log(e.detail);
+            // console.log(e.detail.chain.index, e.detail.module.index);
             break;
     }
 }

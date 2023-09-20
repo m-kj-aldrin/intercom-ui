@@ -7,7 +7,7 @@ import flip from "./flip.js";
  */
 
 /**
- * @template {DragEvent | InputEvent} T
+ * @template {DragEvent | InputEvent | MouseEvent} T
  * @typedef {T & HTMLTarget} HTMLDragEvent
  */
 

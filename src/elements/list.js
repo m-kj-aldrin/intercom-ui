@@ -1,4 +1,33 @@
+import { signal_to_intercom } from "../com/signal.js";
 import COMBase from "./base.js";
+import COMChain from "./chain.js";
+import COMModule from "./module.js";
+import COMOut from "./out.js";
+
+/**@param {COMChain | COMModule | COMOut} target */
+export function extractContext(target) {
+    if (target instanceof COMChain) {
+        return {
+            target: { target, index: target.index },
+            chain: null,
+            module: null,
+        };
+    }
+    if (target instanceof COMModule) {
+        return {
+            target: { target, index: target.index },
+            chain: target.closest("com-chain").index,
+            module: null,
+        };
+    }
+    if (target instanceof COMOut) {
+        return {
+            target: { target, index: target.index },
+            chain: target.closest("com-chain").index,
+            module: target.closest("com-module").index,
+        };
+    }
+}
 
 /**@type {MutationCallback} */
 function indexer(mutations) {
@@ -68,6 +97,18 @@ export default class COMList extends COMBase {
      * @param {boolean} [signal]
      */
     appendElement(toAppend, signal = true) {
+        if (signal && toAppend.attached) {
+            this.dispatchEvent(
+                new CustomEvent("com:element", {
+                    bubbles: true,
+                    detail: {
+                        target: toAppend,
+                        action: "remove",
+                    },
+                })
+            );
+        }
+
         this.appendChild(toAppend);
         index(this.querySelectorAll(":scope > :where(com-chain,com-module)"));
 
@@ -91,6 +132,18 @@ export default class COMList extends COMBase {
      * @param {boolean} [signal]
      */
     insertElement(toInsert, target, signal = true) {
+        if (signal && toInsert.attached) {
+            this.dispatchEvent(
+                new CustomEvent("com:element", {
+                    bubbles: true,
+                    detail: {
+                        target: toInsert,
+                        action: "remove",
+                    },
+                })
+            );
+        }
+
         this.insertBefore(toInsert, target);
         index(this.querySelectorAll(":scope > :where(com-chain,com-module)"));
 
