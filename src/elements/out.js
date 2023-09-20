@@ -25,10 +25,18 @@ const template = (self) => {
 export const com_out_list = new Set();
 
 export default class COMOut extends COMBase {
-    /**@param {COMOut} target */
+    /**@param {COMOut} [target] */
     static updateIndices(target) {
-        com_out_list.delete(target);
-        com_out_list.add(target);
+        if (target) {
+            com_out_list.delete(target);
+            com_out_list.add(target);
+        }
+
+        com_out_list.forEach((o) => {
+            if (!o.isConnected) {
+                com_out_list.delete(o);
+            }
+        });
 
         let i = 0;
         com_out_list.forEach((o) => {

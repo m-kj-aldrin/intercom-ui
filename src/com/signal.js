@@ -144,6 +144,8 @@ function elementActionHandler(e) {
                         oIdx: e.target.index,
                     })()
                 );
+                console.log("o r");
+                COMOut.updateIndices();
                 return;
             }
 

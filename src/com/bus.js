@@ -2,7 +2,7 @@
  * @param {CustomEvent} e
  */
 function hookHandler(name, e) {
-    const c = e.currentTarget.cloneNode(true);
+    // const c = e.currentTarget.cloneNode(true);
 
     // console.log(e.currentTarget.index);
 
@@ -17,9 +17,9 @@ function hookHandler(name, e) {
     //     // }
     // }
 
-    c.index = e.currentTarget.index;
+    // c.index = e.currentTarget.index;
 
-    e.detail[name] = c;
+    e.detail[name] = e.currentTarget;
 }
 
 /**
