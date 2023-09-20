@@ -8,6 +8,10 @@ com-module > com-list {
     margin-top: auto;
     flex-grow: 0;
 
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    flex-wrap: wrap;
+    flex-direction: row;
+}
+
+com-module > com-list > com-out {
+    flex-grow: 1;
 }

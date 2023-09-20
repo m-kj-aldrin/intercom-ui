@@ -44,10 +44,11 @@ function endHandler(e) {
         end.oIdx = e.target.index;
     }
 
-    // console.log(start);
-    // console.log(end);
-
-    signal_to_intercom(signalInsert(e.target)(chain, module));
+    if (e.target.nextElementSibling) {
+        signal_to_intercom(signalInsert(e.target)(chain, module));
+    } else {
+        signal_to_intercom(signalAppend(e.target)(chain, module));
+    }
 }
 
 document.body.addEventListener("dragstart", startHandler);
@@ -76,16 +77,28 @@ export function signal_to_intercom(value) {
  * @param {import("../elements/index.js").COMUnion} element
  */
 function signalInsert(element) {
-    let msg = "";
-
-    const name = Object.getPrototypeOf(element).constructor.name;
-
     if (element instanceof COMModule) {
-        return (parent) => `c ${parent.index} m ${element.index}`;
+        return (parent) => `I c ${parent.index} m ${element.index}`;
     }
     if (element instanceof COMOut) {
         return (parent, module) =>
-            `c ${parent.index} m ${module.index} o ${element.index}`;
+            `I c ${parent.index} m ${module.index} o ${element.index}`;
+    }
+}
+
+/**
+ * @param {import("../elements/index.js").COMUnion} element
+ */
+function signalAppend(element) {
+    if (element instanceof COMChain) {
+        return () => `A c ${element.index}`;
+    }
+    if (element instanceof COMModule) {
+        return (parent) => `A c ${parent.index} m ${element.index}`;
+    }
+    if (element instanceof COMOut) {
+        return (parent, module) =>
+            `A c ${parent.index} m ${module.index} o ${element.index}`;
     }
 }
 
@@ -97,3 +110,21 @@ function signalParameterChange(param) {
     return (chain, module) =>
         `c ${chain.index} m ${module.index} ${param.value}`;
 }
+
+/**
+ *
+ * @param {CustomEvent} e
+ */
+function elementActionHandler(e) {
+    const { chain, module, target } = e.detail;
+    switch (e.detail.action) {
+        case "append":
+            signal_to_intercom(signalAppend(target)(chain, module));
+            break;
+        case "insert":
+            signal_to_intercom(signalInsert(target)(chain, module));
+            break;
+    }
+}
+
+document.addEventListener("com:element", elementActionHandler);

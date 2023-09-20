@@ -1,3 +1,4 @@
+import { attachActionHook } from "../com/bus.js";
 import { dragZone, draggable } from "../interact/drag.js";
 import COMBase from "./base.js";
 
@@ -16,6 +17,8 @@ export default class COMChain extends COMBase {
         this.template = template.bind(null, this);
 
         dragZone(this, "com-module", ["COM-MODULE"]);
+
+        attachActionHook(this, "chain");
     }
 
     /**@param {import("./module.js").ModuleTypes} [type] */
@@ -36,6 +39,7 @@ export default class COMChain extends COMBase {
     /**@param {number} v */
     set index(v) {
         if (typeof v != "number") return;
+
         this._index = v;
     }
 

@@ -1,35 +1,25 @@
 import COMBase from "./base.js";
 
 /**@param {COMOut} self */
-const template = (self) => `
+const template = (self) => {
+    const list = [...Array(16)].map((_, i) => {
+        return `<option value="${i}">${i}</option>`;
+    });
+
+    return `
 <span>
     &DownTeeArrow;
 </span>
 <ul>
-<select>
-    <option value="0">0</option>
-    <option value="1">1</option>
-    <option value="2">2</option>
-    <option value="3">3</option>
-    <option value="4">4</option>
-    <option value="5">5</option>
-    <option value="6">6</option>
-    <option value="7">7</option>
-    <option value="8">8</option>
-</select>
-<select>
-    <option value="0">0</option>
-    <option value="1">1</option>
-    <option value="2">2</option>
-    <option value="3">3</option>
-    <option value="4">4</option>
-    <option value="5">5</option>
-    <option value="6">6</option>
-    <option value="7">7</option>
-    <option value="8">8</option>
-</select>
+    <select>
+        ${list.join("\n")}
+    </select>
+    <select>
+        ${list.join("\n")}
+    </select>
 </ul>
 `;
+};
 
 /**@type {Set<COMOut>} */
 export const com_out_list = new Set();

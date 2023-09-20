@@ -5,7 +5,7 @@ input[type="range"] {
 }
 
 input[type="range"]:active {
-    color: cornflowerblue;
+    /* color: cornflowerblue; */
 }
 
 input[type="range"]:focus {

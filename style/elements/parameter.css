@@ -22,3 +22,7 @@ com-paramlist label span {
 com-paramlist input {
     flex-grow: 1;
 }
+
+input[type="range"]:active {
+    color: hsl(var(--color-offset));
+}

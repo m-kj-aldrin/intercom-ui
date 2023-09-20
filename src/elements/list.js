@@ -14,6 +14,15 @@ function indexer(mutations) {
     });
 }
 
+/**@param {HTMLCollection | NodeListOf<Element>} */
+function index(children) {
+    let i = 0;
+    for (const element of children) {
+        element.index = i;
+        i++;
+    }
+}
+
 /**
  * @template {HTMLElement} T
  * @typedef {T} ExtendsHTMLElement
@@ -34,24 +43,21 @@ export default class COMList extends COMBase {
     }
 
     attributeChangedCallback(name, newValue, oldValue) {
-        switch (name) {
-            case "should-index":
-                const b = newValue == "true" ? true : false;
-                if (this.isIndexing) {
-                    if (!b && this.observer) {
-                        this.observer?.disconnect();
-                    }
-                    return;
-                }
-
-                const observer = new MutationObserver(indexer);
-
-                observer.observe(this, {
-                    childList: true,
-                });
-
-                break;
-        }
+        // switch (name) {
+        //     case "should-index":
+        //         const b = newValue == "true" ? true : false;
+        //         if (this.isIndexing) {
+        //             if (!b && this.observer) {
+        //                 this.observer?.disconnect();
+        //             }
+        //             return;
+        //         }
+        //         const observer = new MutationObserver(indexer);
+        //         observer.observe(this, {
+        //             childList: true,
+        //         });
+        //         break;
+        // }
     }
 
     moveElement() {}
@@ -59,17 +65,45 @@ export default class COMList extends COMBase {
     /**
      * @template {HTMLElement} T
      * @param {T} toAppend
+     * @param {boolean} [signal]
      */
-    appendElement(toAppend) {
+    appendElement(toAppend, signal = true) {
         this.appendChild(toAppend);
+        index(this.querySelectorAll(":scope > :where(com-chain,com-module)"));
+
+        if (signal) {
+            this.dispatchEvent(
+                new CustomEvent("com:element", {
+                    bubbles: true,
+                    detail: {
+                        target: toAppend,
+                        action: "append",
+                    },
+                })
+            );
+        }
     }
 
     /**
      * @template {HTMLElement} T
      * @param {T} toInsert
      * @param {T} target
+     * @param {boolean} [signal]
      */
-    insertElement(toInsert, target) {
+    insertElement(toInsert, target, signal = true) {
         this.insertBefore(toInsert, target);
+        index(this.querySelectorAll(":scope > :where(com-chain,com-module)"));
+
+        if (signal) {
+            this.dispatchEvent(
+                new CustomEvent("com:element", {
+                    bubbles: true,
+                    detail: {
+                        target: toInsert,
+                        action: "insert",
+                    },
+                })
+            );
+        }
     }
 }

@@ -104,9 +104,9 @@ function dragOver(selector, acceptList, nosort = false) {
 
         if (closest == null) {
             if (dragged == toList.lastElementChild) return;
-            toList.appendChild(dragged);
+            toList.appendElement(dragged, false);
         } else if (closest.previousElementSibling != dragged) {
-            toList.insertElement(dragged, closest);
+            toList.insertElement(dragged, closest, false);
         }
 
         F.play();

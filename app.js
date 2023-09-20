@@ -8,7 +8,9 @@ const c0 = document.createElement("com-chain");
 const c1 = document.createElement("com-chain");
 
 document.body.appendChild(networkList);
-networkList.append(c0, c1);
+
+networkList.appendElement(c0);
+networkList.appendElement(c1);
 
 const c0m0 = c0.addModule("LFO");
 c0m0.addOut();

@@ -1,3 +1,4 @@
+import { attachActionHook } from "../com/bus.js";
 import { dragZone, draggable } from "../interact/drag.js";
 import COMBase from "./base.js";
 
@@ -80,11 +81,16 @@ export default class COMModule extends COMBase {
         /**@type {keyof typeof MODULE_TYPES} */
         this.type = "PTH";
 
+        /**@private */
+        this._index = -1;
+
         this.template = template.bind(null, this);
 
         dragZone(this, "com-out", ["COM-OUT"], true);
 
         this.addEventListener("change", (e) => {});
+
+        attachActionHook(this, "module");
     }
 
     addOut() {
