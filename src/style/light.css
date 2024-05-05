@@ -13,4 +13,6 @@ body {
     padding: 4px;
 
     display: grid;
+
+    line-height: 1;
 }

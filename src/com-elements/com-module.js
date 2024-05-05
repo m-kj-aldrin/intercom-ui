@@ -80,7 +80,7 @@ intercomModuleTemplate.innerHTML = `
             .map((type) => `<x-option>${type}</x-option>`)
             .join("\n")}
     </x-input>
-    <x-input type="momentary" label="remove module" option="noLabel=true">&Cross;<x-input>
+    <x-input type="momentary" label="remove module" option="noLabel=true,square=true">&Cross;<x-input>
 </div>
 <div id="operator">
 </div>
@@ -97,6 +97,23 @@ export class IntercomModuleElement extends IntercomBaseElement {
         this.setType(typeAttr);
 
         this.#attachListeners();
+    }
+
+    get signature() {
+        let parameters = this.querySelectorAll("x-input");
+
+        let parametersSignature = [...parameters]
+            .map((parameter) => {
+                return `${parameter.value}`;
+            })
+            .join(":");
+
+        let moduleSignature = `${this.#type} ${parametersSignature}`.replaceAll(
+            " ",
+            ""
+        );
+
+        return moduleSignature;
     }
 
     #attachListeners() {
