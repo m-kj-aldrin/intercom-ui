@@ -2,7 +2,12 @@ import { IntercomBaseElement } from "./base.js";
 
 const intercomNetworkTemplate = document.createElement("template");
 intercomNetworkTemplate.innerHTML = `
-<div id="chains">
+<style>
+    #chains{
+        flex-grow: 1;
+    }
+</style>
+<div id="chains" class="h-list">
     <slot></slot>
 </div>
 `;

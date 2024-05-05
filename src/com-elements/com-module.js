@@ -5,7 +5,7 @@ import { IntercomBaseElement } from "./base.js";
 
 const pthModuleTemplate = document.createElement("template");
 pthModuleTemplate.innerHTML = `
-pth
+<div>...</div>
 `;
 
 const lfoModuleTemplate = document.createElement("template");
@@ -22,7 +22,7 @@ lfoModuleTemplate.innerHTML = `
 
 const bchModuleTemplate = document.createElement("template");
 bchModuleTemplate.innerHTML = `
-bch
+<div>...</div>
 `;
 
 const chaModuleTemplate = document.createElement("template");
@@ -32,12 +32,12 @@ chaModuleTemplate.innerHTML = `
 
 const repModuleTemplate = document.createElement("template");
 repModuleTemplate.innerHTML = `
-rep
+<div>...</div>
 `;
 
 const seqModuleTemplate = document.createElement("template");
 seqModuleTemplate.innerHTML = `
-seq
+<div>...</div>
 `;
 
 const MODULE_TYPE_MAP = {
@@ -47,6 +47,14 @@ const MODULE_TYPE_MAP = {
     cha: chaModuleTemplate,
     rep: repModuleTemplate,
     seq: seqModuleTemplate,
+};
+const MODULE_TYPE_ENUM = {
+    pth: 0,
+    lfo: 1,
+    bch: 2,
+    cha: 3,
+    rep: 4,
+    seq: 5,
 };
 
 /**
@@ -59,15 +67,32 @@ const intercomModuleTemplate = document.createElement("template");
 intercomModuleTemplate.innerHTML = `
 <style>
     :host{
+        box-shadow: 0 0 2px 0px hsl(0 0% 0% / 0.2);
+        position: relative;
+        margin-bottom: 10px;
+        --gap: 4px;
+    }
+    :host(:not(:last-child))::after{
+        position: absolute;
+        content: "\u22A4";
+        bottom: -17px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    :host(:focus-within){
+        /*border-color: #f008;*/
+        border-style: dashed;
     }
     #header{
         display: flex;
         gap: 16px;
         justify-content: space-between;
+        padding: var(--padding);
+        padding-bottom: calc(var(--padding) * 2);
     }
     #operator{
+        padding-top: var(--padding);
         border-top: 1px currentColor solid;
-        padding: 2px 0;
         display: flex;
         flex-direction: column;
         gap: 4px;
@@ -77,12 +102,12 @@ intercomModuleTemplate.innerHTML = `
 <div id="header">
     <x-input type="select" label="module types" option="grid=true,noLabel=true">
         ${Object.keys(MODULE_TYPE_MAP)
-            .map((type) => `<x-option>${type}</x-option>`)
+            .map((type, i) => `<x-option>${type}</x-option>`)
             .join("\n")}
     </x-input>
     <x-input type="momentary" label="remove module" option="noLabel=true,square=true">&Cross;<x-input>
 </div>
-<div id="operator">
+<div id="operator" class="v-list">
 </div>
 `;
 
@@ -163,6 +188,10 @@ export class IntercomModuleElement extends IntercomBaseElement {
         operatorContainer.append(typeTemplate.content.cloneNode(true));
 
         this.#type = type;
+        let moduleTypeSelect = this.shadowRoot.querySelector(
+            "#header [label='module types']"
+        );
+        moduleTypeSelect.value = this.#type;
 
         if (this.parent) {
             this.signalModule();

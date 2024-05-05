@@ -1,12 +1,15 @@
-com-network,
-com-chain,
+/* :where(com-network),
+:where(com-chain),
 com-module {
-    border: 1px currentColor solid;
+    border-width: 1px;
+    border-style: solid;
+    border-color: currentColor;
+
     display: block;
     padding: 2px;
-}
+} */
 
-com-network,
+/* com-network,
 com-chain,
 com-module,
 :host(com-network) #chains,
@@ -28,4 +31,14 @@ com-module {
 :host(com-network) #chains {
     flex-grow: 1;
     flex-direction: row;
+} */
+
+.v-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap, 4px);
+}
+.h-list {
+    display: flex;
+    gap: var(--gap, 4px);
 }

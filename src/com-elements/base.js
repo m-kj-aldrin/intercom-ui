@@ -3,7 +3,18 @@ import "./importShadowStyle.js";
 
 const intercomBaseTemplate = document.createElement("template");
 intercomBaseTemplate.innerHTML = `
+<style>
+    :host{
+        display: flex;
+        flex-direction: column;
+        --gap: 4px;
+        gap: var(--gap,4px);
 
+        --padding: 4px;
+        padding: var(--padding,4px);
+        border: 1px currentColor solid;
+    }
+</style>
 `;
 
 export class IntercomBaseElement extends HTMLElement {

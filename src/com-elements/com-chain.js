@@ -7,16 +7,26 @@ intercomChainTemplate.innerHTML = `
     #header{
         display: flex;
     }
+    #modules{
+        --gap: 8px;
+    }
     x-input[label='remove chain']{
         margin-left: auto;
+    }
+    #input-container{
+        margin-top: 16px;
+        margin-bottom: 8px;
     }
     #input-container :where(.cv,.gt){
         display: flex;
         gap: 4px;
+        margin-top: 2px;
+        margin-left: 8px;
     }
 </style>
 <div id="header">
     <div id="input-container">
+        <div style="font-style:italic;">input &searrow;</div>
         <div class="cv">
             <x-input type="select" label="cv-pid" option="noLabel=false">
                 <x-option value="1">dac</x-option>
@@ -90,7 +100,7 @@ intercomChainTemplate.innerHTML = `
     </div>
     <x-input type="momentary" label="remove chain" option="noLabel=true,square=true">&Cross;</x-input>
 </div>
-<div id="modules">
+<div id="modules" class="v-list">
     <slot></slot>
 </div>
 `;
