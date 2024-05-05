@@ -27,7 +27,7 @@ bch
 
 const chaModuleTemplate = document.createElement("template");
 chaModuleTemplate.innerHTML = `
-cha
+<x-input order="0" type="range" option="showOutput=true,max=1,step=0.01,value=0.5" label="chs"></x-input>
 `;
 
 const repModuleTemplate = document.createElement("template");
@@ -129,6 +129,9 @@ export class IntercomModuleElement extends IntercomBaseElement {
         return false;
     }
 
+    /**@type {ModuleTypeNames} */
+    #type = null;
+
     /**@param {ModuleTypeNames} type */
     setType(type) {
         if (!this.#validType(type)) return;
@@ -141,17 +144,58 @@ export class IntercomModuleElement extends IntercomBaseElement {
         // console.log(operatorContainer.childNodes);
 
         operatorContainer.append(typeTemplate.content.cloneNode(true));
+
+        this.#type = type;
+
+        if (this.parent) {
+            this.signalModule();
+        }
+    }
+
+    #attached = false;
+
+    signalModule(insert = true) {
+        let cidx = this.parent.index;
+        let midx = this.index;
+
+        if (this.#attached) {
+            let removeSignalString = `module -c ${cidx} -r ${midx}`;
+            console.log(removeSignalString);
+        }
+        if (insert) {
+            let insertSignalString = `module -c ${cidx} -i ${midx} ${
+                this.#type
+            }`;
+            console.log(insertSignalString);
+            this.#attached = true;
+        }
     }
 
     /**@param {CustomInputElement} inputElement */
     signalParameter(inputElement) {
         let inputOrderAttr = inputElement.getAttribute("order");
         if (/[0-9]/.test(inputOrderAttr)) {
-            let signalString = `parameter -m x:x -v${inputOrderAttr}:${inputElement.value}`;
+            let cidx = this.parent.index;
+            let midx = this.index;
+            let pidx = +inputOrderAttr;
+
+            let signalString = `parameter -m ${cidx}:${midx} -v${pidx}:${inputElement.value}`;
+
             console.log(signalString);
         }
     }
 
-    connectedCallback() {}
+    remove() {
+        this.signalModule(false);
+        super.remove();
+    }
+
+    connectedCallback() {
+        let chainParent = this.closest("com-chain");
+        if (chainParent) {
+            this.parent = chainParent;
+            this.signalModule();
+        }
+    }
     disconnectedCallback() {}
 }
