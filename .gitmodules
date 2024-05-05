@@ -1,0 +1,3 @@
+[submodule "src/x-input"]
+	path = src/x-input
+	url = https://github.com/m-kj-aldrin/x-input.git

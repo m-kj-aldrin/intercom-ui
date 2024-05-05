@@ -1,0 +1,31 @@
+com-network,
+com-chain,
+com-module {
+    border: 1px currentColor solid;
+    display: block;
+    padding: 2px;
+}
+
+com-network,
+com-chain,
+com-module,
+:host(com-network) #chains,
+:host(com-chain) #modules {
+    display: flex;
+    flex-direction: column;
+}
+
+:host(com-network) #chains,
+:host(com-chain) #modules {
+    gap: 4px;
+}
+
+com-chain,
+com-module {
+    gap: 8px;
+}
+
+:host(com-network) #chains {
+    flex-grow: 1;
+    flex-direction: row;
+}
