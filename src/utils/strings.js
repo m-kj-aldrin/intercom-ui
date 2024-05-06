@@ -1,27 +1,27 @@
-/**@param {string} input */
-export function parseKeyValuePairs(input) {
-    const result = {};
-    const pairs = input.split(",");
+// /**@param {string} input */
+// export function parseKeyValuePairs(input) {
+//     const result = {};
+//     const pairs = input.split(",");
 
-    pairs.forEach((pair) => {
-        const [key, value] = pair.split("=");
-        result[key.trim()] = convertValue(value.trim());
-    });
+//     pairs.forEach((pair) => {
+//         const [key, value] = pair.split("=");
+//         result[key.trim()] = convertValue(value.trim());
+//     });
 
-    return result;
-}
+//     return result;
+// }
 
-function convertValue(value) {
-    // Convert to number if applicable
-    if (!isNaN(parseFloat(value)) && isFinite(value)) {
-        return parseFloat(value);
-    }
-    // Convert to boolean if applicable
-    if (value.toLowerCase() === "true") {
-        return true;
-    } else if (value.toLowerCase() === "false") {
-        return false;
-    }
-    // Return as string if no other conversions apply
-    return value;
-}
+// function convertValue(value) {
+//     // Convert to number if applicable
+//     if (!isNaN(parseFloat(value)) && isFinite(value)) {
+//         return parseFloat(value);
+//     }
+//     // Convert to boolean if applicable
+//     if (value.toLowerCase() === "true") {
+//         return true;
+//     } else if (value.toLowerCase() === "false") {
+//         return false;
+//     }
+//     // Return as string if no other conversions apply
+//     return value;
+// }

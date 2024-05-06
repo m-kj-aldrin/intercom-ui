@@ -75,7 +75,7 @@ intercomModuleTemplate.innerHTML = `
     :host(:not(:last-child))::after{
         position: absolute;
         content: "\u22A4";
-        bottom: -17px;
+        bottom: -16px;
         left: 50%;
         transform: translateX(-50%);
     }
