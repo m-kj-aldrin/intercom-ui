@@ -4,11 +4,35 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>intercom-ui</title>
+
+        <link
+            rel="preload"
+            as="fetch"
+            href="/src/style/shadow.css"
+            crossorigin="anonymous"
+        />
+
         <link rel="stylesheet" href="../src/style/light.css" />
+
+        <link rel="modulepreload" href="/src/x-input/src/utils/dom.js" />
+        <link rel="modulepreload" href="/src/x-input/src/utils/math.js" />
+        <link rel="modulepreload" href="/src/x-input/src/utils/string.js" />
+
+        <link
+            rel="modulepreload"
+            href="/src/com-elements/importShadowStyle.js"
+        />
+
+        <link
+            rel="modulepreload"
+            href="/src/x-input/src/custom-elements/index.js"
+        />
+
         <script
             type="module"
             src="../src/x-input/src/custom-elements/index.js"
         ></script>
+
         <script type="module" src="app.js"></script>
     </head>
     <body>
