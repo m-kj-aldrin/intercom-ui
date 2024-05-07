@@ -30,7 +30,7 @@
 /* - - - chain - - - */
 
 :host(com-chain) #input-container {
-    margin-top: 16px;
+    margin-top: 12px;
     margin-bottom: 16px;
 }
 :host(com-chain) #header {

@@ -1,5 +1,6 @@
 import { CustomInputElement } from "../x-input/src/custom-elements/x-input.js";
 import { IntercomBaseElement } from "./base.js";
+import { MODULE_INPUT_TEMPLATE } from "./com-module.js";
 
 const intercomChainTemplate = document.createElement("template");
 intercomChainTemplate.innerHTML = `
@@ -77,7 +78,8 @@ intercomChainTemplate.innerHTML = `
             </x-input>
         </div>
     </div>
-    <x-input type="momentary" label="remove chain" option="noLabel=true,square=true">&Cross;</x-input>
+    
+   <!-- <x-input type="momentary" label="remove chain" option="noLabel=true,square=true">&Cross;</x-input> -->
 </div>
 <div id="modules" class="v-list">
     <slot></slot>
@@ -128,6 +130,74 @@ export class IntercomChainElement extends IntercomBaseElement {
                 }
             }
         });
+        this.addEventListener("contextmenu", this.#handleContext.bind(this));
+    }
+
+    /**@param {MouseEvent} e */
+    #handleContext(e) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+
+        let x = e.clientX;
+        let y = e.clientY;
+
+        let closestElement = this.#getClosestModule(x, y);
+
+        const contextElement = document.createElement("x-context");
+        contextElement.style.setProperty("--x", `${x}px`);
+        contextElement.style.setProperty("--y", `${y}px`);
+
+        contextElement.innerHTML = `
+        <x-input type="momentary" option="square=true,noLabel=true" label="insert module">&plus;</x-input>
+        <x-input type="momentary" option="square=true,noLabel=true" label="remove chain">&minus;</x-input>
+        `;
+
+        // contextElement.innerHTML = MODULE_INPUT_TEMPLATE;
+
+        contextElement.addEventListener("input", (e) => {
+            switch (e.target.label) {
+                case "insert module":
+                    const newModule = document.createElement("com-module");
+                    this.insertBefore(newModule, closestElement);
+                    contextElement.remove();
+                    break;
+                case "remove chain":
+                    this.remove();
+                    contextElement.remove();
+            }
+        });
+
+        document.body.append(contextElement);
+    }
+
+    /**
+     * @param {number} x
+     * @param {number} y
+     */
+    #getClosestModule(x, y) {
+        let children = this.querySelectorAll("com-module");
+        if (children.length) {
+            let closestElement = [...children].reduce((closest, current) => {
+                let closestBox = closest.getBoundingClientRect();
+                let currentBox = current.getBoundingClientRect();
+
+                let yClosestDiff = Math.abs(y - closestBox.y);
+                let yCurrentDiff = Math.abs(y - currentBox.y);
+
+                if (yCurrentDiff < yClosestDiff) {
+                    return current;
+                }
+
+                return closest;
+            });
+
+            if (closestElement.getBoundingClientRect().y < y) {
+                return null;
+            }
+
+            return closestElement;
+        }
+        return null;
     }
 
     signalInput() {

@@ -1,4 +1,5 @@
 import { CustomInputElement } from "../x-input/src/custom-elements/x-input.js";
+import { waitForDomUpdate } from "../x-input/src/utils/dom.js";
 import { IntercomBaseElement } from "./base.js";
 
 // -- MODULE TEMPLATES --
@@ -63,6 +64,14 @@ const MODULE_TYPE_ENUM = {
 
 // -- MODULE TEMPLATES --
 
+export const MODULE_INPUT_TEMPLATE = `
+<x-input type="select" label="module types" option="grid=true,noLabel=true">
+    ${Object.keys(MODULE_TYPE_MAP)
+        .map((type, i) => `<x-option>${type}</x-option>`)
+        .join("\n")}
+</x-input>
+`;
+
 const intercomModuleTemplate = document.createElement("template");
 intercomModuleTemplate.innerHTML = `
 <div id="header">
@@ -71,7 +80,7 @@ intercomModuleTemplate.innerHTML = `
             .map((type, i) => `<x-option>${type}</x-option>`)
             .join("\n")}
     </x-input>
-    <x-input type="momentary" label="remove module" option="noLabel=true,square=true">&Cross;<x-input>
+    <!-- <x-input type="momentary" label="remove module" option="noLabel=true,square=true">&Cross;<x-input> -->
 </div>
 <div id="operator" class="v-list">
 </div>
@@ -120,6 +129,7 @@ export class IntercomModuleElement extends IntercomBaseElement {
                         break;
                 }
             });
+
         this.shadowRoot
             .querySelector("#operator")
             .addEventListener("input", (e) => {
@@ -127,6 +137,36 @@ export class IntercomModuleElement extends IntercomBaseElement {
                     this.signalParameter(e.target);
                 }
             });
+
+        this.addEventListener("contextmenu", this.#handleContext.bind(this));
+    }
+
+    /**@param {MouseEvent} e */
+    #handleContext(e) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+
+        let x = e.clientX;
+        let y = e.clientY;
+
+        const contextElement = document.createElement("x-context");
+        contextElement.style.setProperty("--x", `${x}px`);
+        contextElement.style.setProperty("--y", `${y}px`);
+
+        contextElement.innerHTML = `
+        <x-input type="momentary" label="remove module" option="square=true,noLabel=true">&Cross;</x-input>
+        `;
+
+        contextElement.addEventListener("input", (e) => {
+            switch (e.target.label) {
+                case "remove module":
+                    contextElement.remove();
+                    this.remove();
+                    break;
+            }
+        });
+
+        document.body.append(contextElement);
     }
 
     /**@param {ModuleTypeNames} type */
@@ -138,7 +178,7 @@ export class IntercomModuleElement extends IntercomBaseElement {
     }
 
     /**@type {ModuleTypeNames} */
-    #type = null;
+    #type = "pth";
 
     /**@param {ModuleTypeNames} type */
     setType(type) {
@@ -158,10 +198,13 @@ export class IntercomModuleElement extends IntercomBaseElement {
             "#header [label='module types']"
         );
         moduleTypeSelect.value = this.#type;
+        // console.log(moduleTypeSelect.value);
+        // waitForDomUpdate().then((_) => (moduleTypeSelect.value = this.#type));
 
         if (this.parent) {
             this.signalModule();
         }
+        return this;
     }
 
     #attached = false;
