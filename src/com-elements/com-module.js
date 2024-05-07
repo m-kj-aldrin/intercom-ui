@@ -65,40 +65,6 @@ const MODULE_TYPE_ENUM = {
 
 const intercomModuleTemplate = document.createElement("template");
 intercomModuleTemplate.innerHTML = `
-<style>
-    :host{
-        box-shadow: 0 0 2px 0px hsl(0 0% 0% / 0.2);
-        position: relative;
-        margin-bottom: 10px;
-        --gap: 4px;
-    }
-    :host(:not(:last-child))::after{
-        position: absolute;
-        content: "\u22A4";
-        bottom: -16px;
-        left: 50%;
-        transform: translateX(-50%);
-    }
-    :host(:focus-within){
-        /*border-color: #f008;*/
-        border-style: dashed;
-    }
-    #header{
-        display: flex;
-        gap: 16px;
-        justify-content: space-between;
-        padding: var(--padding);
-        padding-bottom: calc(var(--padding) * 2);
-    }
-    #operator{
-        padding-top: var(--padding);
-        border-top: 1px currentColor solid;
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-    }
-
-</style>
 <div id="header">
     <x-input type="select" label="module types" option="grid=true,noLabel=true">
         ${Object.keys(MODULE_TYPE_MAP)

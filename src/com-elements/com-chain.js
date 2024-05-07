@@ -3,27 +3,6 @@ import { IntercomBaseElement } from "./base.js";
 
 const intercomChainTemplate = document.createElement("template");
 intercomChainTemplate.innerHTML = `
-<style>
-    #header{
-        display: flex;
-    }
-    #modules{
-        --gap: 8px;
-    }
-    x-input[label='remove chain']{
-        margin-left: auto;
-    }
-    #input-container{
-        margin-top: 16px;
-        margin-bottom: 8px;
-    }
-    #input-container :where(.cv,.gt){
-        display: flex;
-        gap: 4px;
-        margin-top: 2px;
-        margin-left: 8px;
-    }
-</style>
 <div id="header">
     <div id="input-container">
         <div style="font-style:italic;">input &searrow;</div>

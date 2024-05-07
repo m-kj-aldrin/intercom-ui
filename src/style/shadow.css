@@ -1,38 +1,3 @@
-/* :where(com-network),
-:where(com-chain),
-com-module {
-    border-width: 1px;
-    border-style: solid;
-    border-color: currentColor;
-
-    display: block;
-    padding: 2px;
-} */
-
-/* com-network,
-com-chain,
-com-module,
-:host(com-network) #chains,
-:host(com-chain) #modules {
-    display: flex;
-    flex-direction: column;
-}
-
-:host(com-network) #chains,
-:host(com-chain) #modules {
-    gap: 4px;
-}
-
-com-chain,
-com-module {
-    gap: 8px;
-}
-
-:host(com-network) #chains {
-    flex-grow: 1;
-    flex-direction: row;
-} */
-
 .v-list {
     display: flex;
     flex-direction: column;
@@ -42,3 +7,79 @@ com-module {
     display: flex;
     gap: var(--gap, 4px);
 }
+
+:host(:where(com-network, com-chain, com-module)) {
+    display: flex;
+    flex-direction: column;
+    --gap: 4px;
+    gap: var(--gap, 4px);
+
+    --padding: 4px;
+    padding: var(--padding, 4px);
+    border: 1px currentColor solid;
+}
+
+/* - - - network - - - */
+
+:host(com-network) #chains {
+    flex-grow: 1;
+}
+
+/* - - - network - - - */
+
+/* - - - chain - - - */
+
+:host(com-chain) #input-container {
+    margin-top: 16px;
+    margin-bottom: 16px;
+}
+:host(com-chain) #header {
+    display: flex;
+}
+:host(com-chain) #modules {
+    --gap: 8px;
+}
+:host(com-chain) x-input[label="remove chain"] {
+    margin-left: auto;
+}
+:host(com-chain) #input-container :where(.cv, .gt) {
+    display: flex;
+    gap: 4px;
+    margin-top: 2px;
+    margin-left: 8px;
+}
+
+/* - - - chain - - - */
+
+/* - - - module - - - */
+
+:host(com-module) {
+    box-shadow: 0 0 2px 0px hsl(0 0% 0% / 0.2);
+    position: relative;
+    margin-bottom: 10px;
+    --gap: 4px;
+}
+:host(com-module:not(:last-child))::after {
+    position: absolute;
+    content: "\22A4";
+    bottom: -16px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+:host(com-module:focus-within) {
+    border-style: dashed;
+}
+:host(com-module) #header {
+    display: flex;
+    gap: 16px;
+    justify-content: space-between;
+    padding-bottom: calc(var(--padding) * 2);
+    border-bottom: 1px currentColor solid;
+}
+:host(com-module) #operator {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+/* - - - module - - - */

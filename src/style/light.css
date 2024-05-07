@@ -16,14 +16,3 @@ body {
 
     line-height: 1;
 }
-
-/* com-network,
-com-chain,
-:is(com-module) {
-    border-width: 1px;
-    border-style: solid;
-    border-color: currentColor;
-
-    display: block;
-    padding: 2px;
-} */
