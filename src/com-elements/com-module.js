@@ -169,19 +169,19 @@ export class IntercomModuleElement extends IntercomBaseElement {
     setType(type) {
         if (!this.#validType(type)) return;
 
+        this.#type = type;
+        this.shadowRoot
+            .querySelector("#header x-select[name='module select']")
+            .setAttribute("value", type);
+
         let typeTemplate = MODULE_TYPE_MAP[type];
 
         let operatorContainer = this.shadowRoot.querySelector("#operator");
         operatorContainer.innerHTML = "";
 
-        operatorContainer.append(typeTemplate.content.cloneNode(true));
+        let moduleClone = typeTemplate.content.cloneNode(true);
 
-        this.#type = type;
-        let moduleTypeSelect = this.shadowRoot
-            .querySelector("#header")
-            .querySelector("x-select");
-
-        moduleTypeSelect.setAttribute("value", type);
+        operatorContainer.append(moduleClone);
 
         if (this.parent) {
             this.signalModule();
