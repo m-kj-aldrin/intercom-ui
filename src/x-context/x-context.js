@@ -9,8 +9,14 @@ xContextTemplate.innerHTML = `
         left: var(--x, 50%);
         top: var(--y, 50%);
         z-index: 100;
+
+        padding: 4px;
         display:flex;
+        flex-direction: column;
         gap: 4px;
+    }
+    :host(:focus){
+        outline: none;
     }
 </style>
 <slot></slot>
@@ -40,6 +46,9 @@ export class XContextElement extends HTMLElement {
         window.addEventListener("pointerdown", clickOutside.bind(this), {
             signal: this.#clickOutsideController.signal,
         });
+
+        this.tabIndex = 0
+        this.focus();
     }
     disconnectedCallback() {
         this.#clickOutsideController.abort();

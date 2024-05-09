@@ -6,7 +6,7 @@ import { IntercomBaseElement } from "./base.js";
 
 const pthModuleTemplate = document.createElement("template");
 pthModuleTemplate.innerHTML = `
-<div>...</div>
+<div></div>
 `;
 
 const lfoModuleTemplate = document.createElement("template");
@@ -154,7 +154,7 @@ export class IntercomModuleElement extends IntercomBaseElement {
         contextElement.style.setProperty("--y", `${y}px`);
 
         contextElement.innerHTML = `
-        <x-input type="momentary" label="remove module" option="square=true,noLabel=true">&Cross;</x-input>
+        <x-input type="momentary" label="remove module" option="noLabel=true">remove module</x-input>
         `;
 
         contextElement.addEventListener("input", (e) => {
@@ -197,7 +197,9 @@ export class IntercomModuleElement extends IntercomBaseElement {
         let moduleTypeSelect = this.shadowRoot.querySelector(
             "#header [label='module types']"
         );
-        moduleTypeSelect.value = this.#type;
+        moduleTypeSelect.value = type
+        moduleTypeSelect.setAttribute("value", this.#type);
+        // moduleTypeSelect.value = this.#type;
         // console.log(moduleTypeSelect.value);
         // waitForDomUpdate().then((_) => (moduleTypeSelect.value = this.#type));
 
@@ -249,6 +251,17 @@ export class IntercomModuleElement extends IntercomBaseElement {
         let chainParent = this.closest("com-chain");
         if (chainParent) {
             this.parent = chainParent;
+
+            // let s = this.shadowRoot.querySelector(
+            //     "x-input[label='module types']"
+            // );
+
+            // console.log("inp el", s, this.#type,s.value);
+
+            // setTimeout(() => {
+            //     s.value = "lfo";
+            // }, 100);
+
             this.signalModule();
         }
     }

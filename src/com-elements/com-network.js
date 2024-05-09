@@ -32,7 +32,7 @@ export class IntercomNetworkElement extends IntercomBaseElement {
         contextElement.style.setProperty("--y", `${y}px`);
 
         contextElement.innerHTML = `
-        <x-input type="momentary" option="square=true,noLabel=true" label="append chain">&plus;</x-input>
+        <x-input type="momentary" option="noLabel=true" label="append chain">add chain</x-input>
         `;
 
         // contextElement.innerHTML = MODULE_INPUT_TEMPLATE;
@@ -50,6 +50,7 @@ export class IntercomNetworkElement extends IntercomBaseElement {
         document.body.append(contextElement);
     }
 
-    connectedCallback() {}
+    connectedCallback() {
+    }
     disconnectedCallback() {}
 }

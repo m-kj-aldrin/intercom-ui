@@ -148,9 +148,21 @@ export class IntercomChainElement extends IntercomBaseElement {
         contextElement.style.setProperty("--y", `${y}px`);
 
         contextElement.innerHTML = `
-        <x-input type="momentary" option="square=true,noLabel=true" label="insert module">&plus;</x-input>
-        <x-input type="momentary" option="square=true,noLabel=true" label="remove chain">&minus;</x-input>
+        <x-input type="momentary" option="noLabel=true" label="remove chain">remove chain</x-input>
+        <x-input type="select" option="staticLabel=add module,noLabel=true,grid=true" label="insert module">
+            <x-option>pth</x-option>
+            <x-option>lfo</x-option>
+            <x-option>bch</x-option>
+            <x-option>cha</x-option>
+            <x-option>seq</x-option>
+            <x-option>rep</x-option>
+        </x-input>
         `;
+
+        // contextElement.innerHTML = `
+        // <x-input type="momentary" option="square=true,noLabel=true" label="insert module">&plus;</x-input>
+        // <x-input type="momentary" option="square=true,noLabel=true" label="remove chain">&minus;</x-input>
+        // `;
 
         // contextElement.innerHTML = MODULE_INPUT_TEMPLATE;
 
@@ -158,6 +170,7 @@ export class IntercomChainElement extends IntercomBaseElement {
             switch (e.target.label) {
                 case "insert module":
                     const newModule = document.createElement("com-module");
+                    newModule.setType(e.target.value);
                     this.insertBefore(newModule, closestElement);
                     contextElement.remove();
                     break;
