@@ -1,5 +1,4 @@
-import { CustomInputElement } from "../x-input/src/custom-elements/x-input.js";
-import { waitForDomUpdate } from "../x-input/src/utils/dom.js";
+import { InputBaseElement } from "../x-input/src/custom-elements/base.js";
 import { IntercomBaseElement } from "./base.js";
 
 // -- MODULE TEMPLATES --
@@ -11,14 +10,14 @@ pthModuleTemplate.innerHTML = `
 
 const lfoModuleTemplate = document.createElement("template");
 lfoModuleTemplate.innerHTML = `
-<x-input order="0" type="select" option="showOutput=true" label="amp">
+<x-select order="0"  showOutput="true" label="amp">
     <x-option value="0">square</x-option>
     <x-option value="1" selected>sine</x-option>
     <x-option value="2">ramp up</x-option>
     <x-option value="3">ramp down</x-option>
-</x-input>
-<x-input order="1" type="range" option="showOutput=true,max=2000,value=20" label="frq"></x-input>
-<x-input order="2" type="range" option="showOutput=true,max=1,step=0.01,value=0.5" label="amp"></x-input>
+</x-select>
+<x-range order="1" showOutput="true" max="2000" value="20" label="frq"></x-range>
+<x-range order="2" showOutput="true" max="1" step="0.01" value="0.5" label="amp"></x-range>
 `;
 
 const bchModuleTemplate = document.createElement("template");
@@ -28,7 +27,7 @@ bchModuleTemplate.innerHTML = `
 
 const chaModuleTemplate = document.createElement("template");
 chaModuleTemplate.innerHTML = `
-<x-input order="0" type="range" option="showOutput=true,max=1,step=0.01,value=0.5" label="chs"></x-input>
+<x-range order="0" showOutput="true" max="1" step="0.01" value="0.5" label="chs"></x-range>
 `;
 
 const repModuleTemplate = document.createElement("template");
@@ -49,14 +48,6 @@ const MODULE_TYPE_MAP = {
     rep: repModuleTemplate,
     seq: seqModuleTemplate,
 };
-const MODULE_TYPE_ENUM = {
-    pth: 0,
-    lfo: 1,
-    bch: 2,
-    cha: 3,
-    rep: 4,
-    seq: 5,
-};
 
 /**
  * @typedef {keyof typeof MODULE_TYPE_MAP} ModuleTypeNames
@@ -65,25 +56,17 @@ const MODULE_TYPE_ENUM = {
 // -- MODULE TEMPLATES --
 
 export const MODULE_INPUT_TEMPLATE = `
-<x-input type="select" label="module types" option="grid=true,noLabel=true">
-    ${Object.keys(MODULE_TYPE_MAP)
-        .map((type, i) => `<x-option>${type}</x-option>`)
-        .join("\n")}
-</x-input>
+<x-select name="module select" grid >
+${Object.keys(MODULE_TYPE_MAP)
+    .map((type, i) => `<x-option>${type}</x-option>`)
+    .join("\n")}
+</x-select>
 `;
 
 const intercomModuleTemplate = document.createElement("template");
 intercomModuleTemplate.innerHTML = `
-<div id="header">
-    <x-input type="select" label="module types" option="grid=true,noLabel=true">
-        ${Object.keys(MODULE_TYPE_MAP)
-            .map((type, i) => `<x-option>${type}</x-option>`)
-            .join("\n")}
-    </x-input>
-    <!-- <x-input type="momentary" label="remove module" option="noLabel=true,square=true">&Cross;<x-input> -->
-</div>
-<div id="operator" class="v-list">
-</div>
+<div id="header">${MODULE_INPUT_TEMPLATE}</div>
+<div id="operator" class="v-list"></div>
 `;
 
 export class IntercomModuleElement extends IntercomBaseElement {
@@ -120,11 +103,13 @@ export class IntercomModuleElement extends IntercomBaseElement {
         this.shadowRoot
             .querySelector("#header")
             .addEventListener("input", (e) => {
-                switch (e.target.label) {
+                if (!(e.target instanceof InputBaseElement)) return;
+
+                switch (e.target.name) {
                     case "remove module":
                         this.remove();
                         break;
-                    case "module types":
+                    case "module select":
                         this.setType(e.target.value);
                         break;
                 }
@@ -133,7 +118,7 @@ export class IntercomModuleElement extends IntercomBaseElement {
         this.shadowRoot
             .querySelector("#operator")
             .addEventListener("input", (e) => {
-                if (e.target instanceof CustomInputElement) {
+                if (e.target instanceof InputBaseElement) {
                     this.signalParameter(e.target);
                 }
             });
@@ -188,20 +173,15 @@ export class IntercomModuleElement extends IntercomBaseElement {
 
         let operatorContainer = this.shadowRoot.querySelector("#operator");
         operatorContainer.innerHTML = "";
-        // operatorContainer.childNodes.forEach((node) => node.remove());
-        // console.log(operatorContainer.childNodes);
 
         operatorContainer.append(typeTemplate.content.cloneNode(true));
 
         this.#type = type;
-        let moduleTypeSelect = this.shadowRoot.querySelector(
-            "#header [label='module types']"
-        );
-        moduleTypeSelect.value = type
-        moduleTypeSelect.setAttribute("value", this.#type);
-        // moduleTypeSelect.value = this.#type;
-        // console.log(moduleTypeSelect.value);
-        // waitForDomUpdate().then((_) => (moduleTypeSelect.value = this.#type));
+        let moduleTypeSelect = this.shadowRoot
+            .querySelector("#header")
+            .querySelector("x-select");
+
+        moduleTypeSelect.setAttribute("value", type);
 
         if (this.parent) {
             this.signalModule();
@@ -228,7 +208,7 @@ export class IntercomModuleElement extends IntercomBaseElement {
         }
     }
 
-    /**@param {CustomInputElement} inputElement */
+    /**@param {InputBaseElement} inputElement */
     signalParameter(inputElement) {
         let inputOrderAttr = inputElement.getAttribute("order");
         if (/[0-9]/.test(inputOrderAttr)) {
@@ -251,17 +231,6 @@ export class IntercomModuleElement extends IntercomBaseElement {
         let chainParent = this.closest("com-chain");
         if (chainParent) {
             this.parent = chainParent;
-
-            // let s = this.shadowRoot.querySelector(
-            //     "x-input[label='module types']"
-            // );
-
-            // console.log("inp el", s, this.#type,s.value);
-
-            // setTimeout(() => {
-            //     s.value = "lfo";
-            // }, 100);
-
             this.signalModule();
         }
     }

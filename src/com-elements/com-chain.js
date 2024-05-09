@@ -1,6 +1,5 @@
-import { CustomInputElement } from "../x-input/src/custom-elements/x-input.js";
+import { InputBaseElement } from "../x-input/src/custom-elements/base.js";
 import { IntercomBaseElement } from "./base.js";
-import { MODULE_INPUT_TEMPLATE } from "./com-module.js";
 
 const intercomChainTemplate = document.createElement("template");
 intercomChainTemplate.innerHTML = `
@@ -8,7 +7,8 @@ intercomChainTemplate.innerHTML = `
     <div id="input-container">
         <div style="font-style:italic;">input &searrow;</div>
         <div class="cv">
-            <x-input type="select" label="cv-pid" option="noLabel=false">
+            <div>cv:</div>
+            <x-select name="cv-pid" label="pid">
                 <x-option value="1">dac</x-option>
                 <x-option value="2">adc</x-option>
                 <x-option value="3">dout</x-option>
@@ -22,8 +22,8 @@ intercomChainTemplate.innerHTML = `
                 <x-option value="11">I2C_2</x-option>
                 <x-option value="12">osc</x-option>
                 <x-option value="13">none</x-option>
-            </x-input>
-            <x-input type="select" label="cv-ch" option="noLabel=false">
+            </x-select>
+            <x-select name="cv-ch" label="ch">
                 <x-option>1</x-option>
                 <x-option>2</x-option>
                 <x-option>3</x-option>
@@ -40,10 +40,11 @@ intercomChainTemplate.innerHTML = `
                 <x-option>14</x-option>
                 <x-option>15</x-option>
                 <x-option>16</x-option>
-            </x-input>
+            </x-select>
         </div>
         <div class="gt">
-            <x-input type="select" label="gt-pid" option="noLabel=false">
+            <div>gt:</div>
+            <x-select name="gt-pid" label="pid">
                 <x-option value="1">dac</x-option>
                 <x-option value="2">adc</x-option>
                 <x-option value="3">dout</x-option>
@@ -57,8 +58,8 @@ intercomChainTemplate.innerHTML = `
                 <x-option value="11">I2C_2</x-option>
                 <x-option value="12">osc</x-option>
                 <x-option value="13">none</x-option>
-            </x-input>
-            <x-input type="select" label="gt-ch" option="noLabel=false">
+            </x-select>
+            <x-select name="gt-ch" label="ch">
                 <x-option>1</x-option>
                 <x-option>2</x-option>
                 <x-option>3</x-option>
@@ -75,11 +76,9 @@ intercomChainTemplate.innerHTML = `
                 <x-option>14</x-option>
                 <x-option>15</x-option>
                 <x-option>16</x-option>
-            </x-input>
+            </x-select>
         </div>
     </div>
-    
-   <!-- <x-input type="momentary" label="remove chain" option="noLabel=true,square=true">&Cross;</x-input> -->
 </div>
 <div id="modules" class="v-list">
     <slot></slot>
@@ -106,8 +105,8 @@ export class IntercomChainElement extends IntercomBaseElement {
 
     #attachListeners() {
         this.shadowRoot.addEventListener("input", (e) => {
-            if (e.target instanceof CustomInputElement) {
-                switch (e.target.label) {
+            if (e.target instanceof InputBaseElement) {
+                switch (e.target.name) {
                     case "remove chain":
                         this.remove();
                         break;
@@ -148,26 +147,21 @@ export class IntercomChainElement extends IntercomBaseElement {
         contextElement.style.setProperty("--y", `${y}px`);
 
         contextElement.innerHTML = `
-        <x-input type="momentary" option="noLabel=true" label="remove chain">remove chain</x-input>
-        <x-input type="select" option="staticLabel=add module,noLabel=true,grid=true" label="insert module">
+        <x-momentary label="remove chain">remove chain</x-momentary>
+        <x-select label="insert module">
             <x-option>pth</x-option>
             <x-option>lfo</x-option>
             <x-option>bch</x-option>
             <x-option>cha</x-option>
             <x-option>seq</x-option>
             <x-option>rep</x-option>
-        </x-input>
+        </x-select>
         `;
 
-        // contextElement.innerHTML = `
-        // <x-input type="momentary" option="square=true,noLabel=true" label="insert module">&plus;</x-input>
-        // <x-input type="momentary" option="square=true,noLabel=true" label="remove chain">&minus;</x-input>
-        // `;
-
-        // contextElement.innerHTML = MODULE_INPUT_TEMPLATE;
-
         contextElement.addEventListener("input", (e) => {
-            switch (e.target.label) {
+            if (!(e.target instanceof InputBaseElement)) return;
+
+            switch (e.target.name) {
                 case "insert module":
                     const newModule = document.createElement("com-module");
                     newModule.setType(e.target.value);

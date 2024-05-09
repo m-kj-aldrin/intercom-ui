@@ -14,6 +14,7 @@ export class IntercomNetworkElement extends IntercomBaseElement {
         this.shadowRoot.append(intercomNetworkTemplate.content.cloneNode(true));
 
         this.#attachListeners();
+
     }
 
     #attachListeners() {
