@@ -8,7 +8,7 @@ intercomChainTemplate.innerHTML = `
         <div style="font-style:italic;">input &searrow;</div>
         <div class="cv">
             <div>cv:</div>
-            <x-select name="cv-pid" label="pid">
+            <x-select name="cv-pid" label="pid" blank-start>
                 <x-option value="1">dac</x-option>
                 <x-option value="2">adc</x-option>
                 <x-option value="3">dout</x-option>
@@ -23,7 +23,7 @@ intercomChainTemplate.innerHTML = `
                 <x-option value="12">osc</x-option>
                 <x-option value="13">none</x-option>
             </x-select>
-            <x-select name="cv-ch" label="ch">
+            <x-select name="cv-ch" label="ch" blank-start>
                 <x-option>1</x-option>
                 <x-option>2</x-option>
                 <x-option>3</x-option>
@@ -44,7 +44,7 @@ intercomChainTemplate.innerHTML = `
         </div>
         <div class="gt">
             <div>gt:</div>
-            <x-select name="gt-pid" label="pid">
+            <x-select name="gt-pid" label="pid" blank-start>
                 <x-option value="1">dac</x-option>
                 <x-option value="2">adc</x-option>
                 <x-option value="3">dout</x-option>
@@ -59,7 +59,7 @@ intercomChainTemplate.innerHTML = `
                 <x-option value="12">osc</x-option>
                 <x-option value="13">none</x-option>
             </x-select>
-            <x-select name="gt-ch" label="ch">
+            <x-select name="gt-ch" label="ch" blank-start>
                 <x-option>1</x-option>
                 <x-option>2</x-option>
                 <x-option>3</x-option>
@@ -225,7 +225,7 @@ export class IntercomChainElement extends IntercomBaseElement {
         if (this.#inputCvCh) {
             signature += `:${this.#inputCvCh}`;
         } else {
-            signature += `_`;
+            signature += `:_`;
         }
         if (this.#inputGtPid) {
             signature += `,gt${this.#inputGtPid}`;
@@ -259,7 +259,7 @@ export class IntercomChainElement extends IntercomBaseElement {
             let removeSignalString = `chain -r ${cidx}`;
             console.log(removeSignalString);
         } else {
-            let newSignalString = `chain -n`;
+            let newSignalString = `chain -n ${this.signature}`;
             console.log(newSignalString);
         }
     }

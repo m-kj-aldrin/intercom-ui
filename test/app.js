@@ -1,4 +1,5 @@
 import "../src/com-elements/index.js";
+import { waitForDomUpdate } from "../src/x-input/src/utils/dom.js";
 
 const network = document.createElement("com-network");
 
@@ -13,9 +14,6 @@ const module0 = document.createElement("com-module").setType("lfo");
 const module1 = document.createElement("com-module").setType("cha");
 
 chain0.append(module0, module1);
-
-// module0.setType("lfo");
-// module1.setType("cha");
 
 // network.innerHTML = `
 // <com-chain>

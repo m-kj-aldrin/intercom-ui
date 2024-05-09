@@ -1,4 +1,5 @@
 import { InputBaseElement } from "../x-input/src/custom-elements/base.js";
+import { CustomSelectElement } from "../x-input/src/custom-elements/x-select.js";
 import { IntercomBaseElement } from "./base.js";
 
 // -- MODULE TEMPLATES --
@@ -65,15 +66,31 @@ ${Object.keys(MODULE_TYPE_MAP)
 
 const intercomModuleTemplate = document.createElement("template");
 intercomModuleTemplate.innerHTML = `
-<div id="header">${MODULE_INPUT_TEMPLATE}</div>
+<div id="header"></div>
 <div id="operator" class="v-list"></div>
 `;
 
 export class IntercomModuleElement extends IntercomBaseElement {
+    /**@type {CustomSelectElement} */
+    #moduleSelect = null
+
     constructor() {
         super();
 
+        let moduleSelect = document.createElement('x-select');
+        this.#moduleSelect = moduleSelect
+
+        moduleSelect.name = "module select"
+        moduleSelect.setOption({grid:true})
+        moduleSelect.innerHTML = `
+        ${Object.keys(MODULE_TYPE_MAP)
+            .map((type, i) => `<x-option>${type}</x-option>`)
+            .join("\n")}
+        `
+
         this.shadowRoot.append(intercomModuleTemplate.content.cloneNode(true));
+
+        this.shadowRoot.querySelector("#header").prepend(moduleSelect)
 
         let typeAttr = this.getAttribute("type");
 
@@ -170,9 +187,7 @@ export class IntercomModuleElement extends IntercomBaseElement {
         if (!this.#validType(type)) return;
 
         this.#type = type;
-        this.shadowRoot
-            .querySelector("#header x-select[name='module select']")
-            .setAttribute("value", type);
+        this.#moduleSelect.value = type
 
         let typeTemplate = MODULE_TYPE_MAP[type];
 
