@@ -156,7 +156,7 @@ export class IntercomModuleElement extends IntercomBaseElement {
         contextElement.style.setProperty("--y", `${y}px`);
 
         contextElement.innerHTML = `
-        <x-input type="momentary" label="remove module" option="noLabel=true">remove module</x-input>
+        <x-momentary name="remove module" >remove module</x-input>
         `;
 
         contextElement.addEventListener("input", (e) => {

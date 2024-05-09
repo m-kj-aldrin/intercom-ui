@@ -147,8 +147,8 @@ export class IntercomChainElement extends IntercomBaseElement {
         contextElement.style.setProperty("--y", `${y}px`);
 
         contextElement.innerHTML = `
-        <x-momentary label="remove chain">remove chain</x-momentary>
-        <x-select label="insert module">
+        <x-momentary name="remove chain">remove chain</x-momentary>
+        <x-select name="insert module" grid static-label>
             <x-option>pth</x-option>
             <x-option>lfo</x-option>
             <x-option>bch</x-option>

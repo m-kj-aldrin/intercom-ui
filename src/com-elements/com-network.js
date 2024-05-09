@@ -1,3 +1,4 @@
+import { InputBaseElement } from "../x-input/src/custom-elements/base.js";
 import { IntercomBaseElement } from "./base.js";
 
 const intercomNetworkTemplate = document.createElement("template");
@@ -14,7 +15,6 @@ export class IntercomNetworkElement extends IntercomBaseElement {
         this.shadowRoot.append(intercomNetworkTemplate.content.cloneNode(true));
 
         this.#attachListeners();
-
     }
 
     #attachListeners() {
@@ -33,13 +33,13 @@ export class IntercomNetworkElement extends IntercomBaseElement {
         contextElement.style.setProperty("--y", `${y}px`);
 
         contextElement.innerHTML = `
-        <x-input type="momentary" option="noLabel=true" label="append chain">add chain</x-input>
+        <x-momentary name="append chain">add chain</x-momentary>
         `;
 
-        // contextElement.innerHTML = MODULE_INPUT_TEMPLATE;
-
         contextElement.addEventListener("input", (e) => {
-            switch (e.target.label) {
+            if (!(e.target instanceof InputBaseElement)) return;
+
+            switch (e.target.name) {
                 case "append chain":
                     const newChain = document.createElement("com-chain");
                     this.append(newChain);
@@ -51,7 +51,6 @@ export class IntercomNetworkElement extends IntercomBaseElement {
         document.body.append(contextElement);
     }
 
-    connectedCallback() {
-    }
+    connectedCallback() {}
     disconnectedCallback() {}
 }
