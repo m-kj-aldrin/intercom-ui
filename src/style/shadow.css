@@ -8,7 +8,7 @@
     gap: var(--gap, 4px);
 }
 
-:host(:where(com-network, com-chain, com-module)) {
+:host(:where(com-network, com-chain, com-module,com-out)) {
     display: flex;
     flex-direction: column;
     --gap: 4px;

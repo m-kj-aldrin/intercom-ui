@@ -249,7 +249,7 @@ export class IntercomChainElement extends IntercomBaseElement {
             })
             .join(",");
 
-        return `${this.inputSignature} ${moduleSignatures}`;
+        return `${this.inputSignature}>${moduleSignatures}`;
     }
 
     signalChain(remove = false) {

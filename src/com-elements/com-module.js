@@ -1,6 +1,8 @@
 import { InputBaseElement } from "../x-input/src/custom-elements/base.js";
 import { CustomSelectElement } from "../x-input/src/custom-elements/x-select.js";
+import { waitForDomUpdate } from "../x-input/src/utils/dom.js";
 import { IntercomBaseElement } from "./base.js";
+import { IntercomChainElement } from "./com-chain.js";
 
 // -- MODULE TEMPLATES --
 
@@ -59,14 +61,16 @@ const MODULE_TYPE_MAP = {
 export const MODULE_INPUT_TEMPLATE = `
 <x-select name="module select" grid >
 ${Object.keys(MODULE_TYPE_MAP)
-    .map((type, i) => `<x-option>${type}</x-option>`)
-    .join("\n")}
+        .map((type, i) => `<x-option>${type}</x-option>`)
+        .join("\n")}
 </x-select>
 `;
 
 const intercomModuleTemplate = document.createElement("template");
 intercomModuleTemplate.innerHTML = `
-<div id="header"></div>
+<div id="header">
+    <div id="out-container"></div>
+</div>
 <div id="operator" class="v-list"></div>
 `;
 
@@ -81,11 +85,11 @@ export class IntercomModuleElement extends IntercomBaseElement {
         this.#moduleSelect = moduleSelect
 
         moduleSelect.name = "module select"
-        moduleSelect.setOption({grid:true})
+        moduleSelect.setOption({ grid: true })
         moduleSelect.innerHTML = `
         ${Object.keys(MODULE_TYPE_MAP)
-            .map((type, i) => `<x-option>${type}</x-option>`)
-            .join("\n")}
+                .map((type, i) => `<x-option>${type}</x-option>`)
+                .join("\n")}
         `
 
         this.shadowRoot.append(intercomModuleTemplate.content.cloneNode(true));
@@ -100,7 +104,7 @@ export class IntercomModuleElement extends IntercomBaseElement {
     }
 
     get signature() {
-        let parameters = this.querySelectorAll("x-input");
+        let parameters = this.shadowRoot.querySelector("#operator").querySelectorAll("x-momentary,x-toggle,x-select,x-range,x-number");
 
         let parametersSignature = [...parameters]
             .map((parameter) => {
@@ -113,7 +117,8 @@ export class IntercomModuleElement extends IntercomBaseElement {
             ""
         );
 
-        return moduleSignature;
+
+        return moduleSignature
     }
 
     #attachListeners() {
@@ -156,7 +161,8 @@ export class IntercomModuleElement extends IntercomBaseElement {
         contextElement.style.setProperty("--y", `${y}px`);
 
         contextElement.innerHTML = `
-        <x-momentary name="remove module" >remove module</x-input>
+        <x-momentary name="remove module">remove module</x-momentary>
+        <x-momentary name="add out">add out</x-momentary>
         `;
 
         contextElement.addEventListener("input", (e) => {
@@ -165,6 +171,10 @@ export class IntercomModuleElement extends IntercomBaseElement {
                     contextElement.remove();
                     this.remove();
                     break;
+                case "add out":
+                    const newOut = document.createElement("com-out")
+                    const outContainer = this.shadowRoot.querySelector("#out-container")
+                    outContainer.append(newOut)
             }
         });
 
@@ -215,9 +225,9 @@ export class IntercomModuleElement extends IntercomBaseElement {
             console.log(removeSignalString);
         }
         if (insert) {
-            let insertSignalString = `module -c ${cidx} -i ${midx} ${
-                this.#type
-            }`;
+
+            let insertSignalString = `module -c ${cidx} -i ${midx} ${this.signature
+                }`;
             console.log(insertSignalString);
             this.#attached = true;
         }
@@ -242,12 +252,21 @@ export class IntercomModuleElement extends IntercomBaseElement {
         super.remove();
     }
 
+    // get parent(){
+    //     return super.parent
+    // }
+    // /**@param {IntercomChainElement} parent */
+    // set parent(parent){
+    //     super.parent = parent
+    // }
+
     connectedCallback() {
         let chainParent = this.closest("com-chain");
         if (chainParent) {
             this.parent = chainParent;
-            this.signalModule();
+
+            waitForDomUpdate().then(s => this.signalModule())
         }
     }
-    disconnectedCallback() {}
+    disconnectedCallback() { }
 }
