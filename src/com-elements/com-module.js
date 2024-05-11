@@ -247,6 +247,7 @@ export class IntercomModuleElement extends IntercomBaseElement {
                 break;
             case "insert":
                 signalString = `module -c ${cidx} -i ${midx} ${this.signature}`;
+
                 this.#attached = true;
                 break;
             case "remove":
@@ -258,6 +259,11 @@ export class IntercomModuleElement extends IntercomBaseElement {
 
         if (signalString) {
             console.log(signalString);
+        }
+
+        if (this.#attached) {
+            let attachedOuts = this.shadowRoot.querySelectorAll("com-out");
+            attachedOuts.forEach((out) => out.signalOut("append"));
         }
     }
 
