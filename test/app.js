@@ -2,18 +2,29 @@ import "../src/com-elements/index.js";
 import { waitForDomUpdate } from "../src/x-input/src/utils/dom.js";
 
 const network = document.createElement("com-network");
-
 document.body.append(network);
 
-const chain0 = document.createElement("com-chain");
+// const chain0 = document.createElement("com-chain");
+const chain0 = network.createChain();
 
-network.append(chain0);
+const module00 = chain0.insertModule("lfo");
+const module01 = chain0.insertModule("pth");
+// const module02 = chain0.appendModule("cha");
 
-const module0 = document.createElement("com-module").setType("lfo");
+// chain0.insertModule("cha", 2);
 
-const module1 = document.createElement("com-module").setType("cha");
+chain0.insertModule(module00, 1);
 
-chain0.append(module0, module1);
+// chain0.insertModule(module02, 0);
+
+// network.append(chain0);
+
+// const module0 = document.createElement("com-module").setType("lfo");
+
+// const module1 = document.createElement("com-module").setType("cha");
+
+// // chain0.append(module0, module1);
+// chain0.insertChild(module0, module1);
 
 // network.innerHTML = `
 // <com-chain>

@@ -13,7 +13,13 @@ export class IntercomBaseElement extends HTMLElement {
 
         this.shadowRoot.adoptedStyleSheets = document.adoptedStyleSheets;
 
-        this.shadowRoot.append(intercomBaseTemplate.content.cloneNode(true));
+        // this.shadowRoot.append(intercomBaseTemplate.content.cloneNode(true));
+    }
+
+    /**@param {IntercomBaseElement[]} child */
+    insertChild(...child) {
+        child.forEach((c) => (c.parent = this));
+        this.append(...child);
     }
 
     /**@type {IntercomBaseElement} */

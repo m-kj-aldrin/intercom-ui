@@ -8,7 +8,6 @@ import { IntercomChainElement } from "./com-chain.js";
 
 const pthModuleTemplate = document.createElement("template");
 pthModuleTemplate.innerHTML = `
-<div></div>
 `;
 
 const lfoModuleTemplate = document.createElement("template");
@@ -61,40 +60,42 @@ const MODULE_TYPE_MAP = {
 export const MODULE_INPUT_TEMPLATE = `
 <x-select name="module select" grid >
 ${Object.keys(MODULE_TYPE_MAP)
-        .map((type, i) => `<x-option>${type}</x-option>`)
-        .join("\n")}
+    .map((type, i) => `<x-option>${type}</x-option>`)
+    .join("\n")}
 </x-select>
 `;
 
 const intercomModuleTemplate = document.createElement("template");
 intercomModuleTemplate.innerHTML = `
 <div id="header">
+    ${MODULE_INPUT_TEMPLATE}
     <div id="out-container"></div>
 </div>
 <div id="operator" class="v-list"></div>
 `;
 
 export class IntercomModuleElement extends IntercomBaseElement {
-    /**@type {CustomSelectElement} */
-    #moduleSelect = null
+    // /**@type {CustomSelectElement} */
+    // #moduleSelect = null;
 
     constructor() {
         super();
 
-        let moduleSelect = document.createElement('x-select');
-        this.#moduleSelect = moduleSelect
+        // let moduleSelect = document.createElement("x-select");
+        // this.#moduleSelect = moduleSelect;
 
-        moduleSelect.name = "module select"
-        moduleSelect.setOption({ grid: true })
-        moduleSelect.innerHTML = `
-        ${Object.keys(MODULE_TYPE_MAP)
-                .map((type, i) => `<x-option>${type}</x-option>`)
-                .join("\n")}
-        `
+        // moduleSelect.name = "module select";
+        // moduleSelect.setOption({ grid: true });
+        // moduleSelect.innerHTML = `
+        // ${Object.keys(MODULE_TYPE_MAP)
+        //     .map((type, i) => `<x-option>${type}</x-option>`)
+        //     .join("\n")}
+        // `;
 
+        // this.shadowRoot.innerHTML += intercomModuleTemplate.innerHTML;
         this.shadowRoot.append(intercomModuleTemplate.content.cloneNode(true));
 
-        this.shadowRoot.querySelector("#header").prepend(moduleSelect)
+        // this.shadowRoot.querySelector("#header").prepend(moduleSelect);
 
         let typeAttr = this.getAttribute("type");
 
@@ -104,7 +105,9 @@ export class IntercomModuleElement extends IntercomBaseElement {
     }
 
     get signature() {
-        let parameters = this.shadowRoot.querySelector("#operator").querySelectorAll("x-momentary,x-toggle,x-select,x-range,x-number");
+        let parameters = this.shadowRoot
+            .querySelector("#operator")
+            .querySelectorAll("x-momentary,x-toggle,x-select,x-range,x-number");
 
         let parametersSignature = [...parameters]
             .map((parameter) => {
@@ -117,8 +120,7 @@ export class IntercomModuleElement extends IntercomBaseElement {
             ""
         );
 
-
-        return moduleSignature
+        return moduleSignature;
     }
 
     #attachListeners() {
@@ -133,6 +135,8 @@ export class IntercomModuleElement extends IntercomBaseElement {
                         break;
                     case "module select":
                         this.setType(e.target.value);
+                        this.signalModule("remove");
+                        this.signalModule("insert");
                         break;
                 }
             });
@@ -172,9 +176,19 @@ export class IntercomModuleElement extends IntercomBaseElement {
                     this.remove();
                     break;
                 case "add out":
-                    const newOut = document.createElement("com-out")
-                    const outContainer = this.shadowRoot.querySelector("#out-container")
-                    outContainer.append(newOut)
+                    const newOut = document.createElement("com-out");
+                    newOut.parent = this;
+
+                    const outContainer =
+                        this.shadowRoot.querySelector("#out-container");
+                    outContainer.append(newOut);
+
+                    // newOut.signalOut("append")
+
+                    contextElement.remove();
+                    setTimeout(() => {
+                        // newOut.remove();
+                    }, 500);
             }
         });
 
@@ -197,7 +211,9 @@ export class IntercomModuleElement extends IntercomBaseElement {
         if (!this.#validType(type)) return;
 
         this.#type = type;
-        this.#moduleSelect.value = type
+        this.setAttribute("type", type);
+        // this.#moduleSelect.value = type;
+        this.shadowRoot.querySelector("[name='module select']").value = type;
 
         let typeTemplate = MODULE_TYPE_MAP[type];
 
@@ -208,28 +224,40 @@ export class IntercomModuleElement extends IntercomBaseElement {
 
         operatorContainer.append(moduleClone);
 
-        if (this.parent) {
-            this.signalModule();
-        }
+        // console.log(this.isConnected,this.parent);
+
         return this;
     }
 
     #attached = false;
 
-    signalModule(insert = true) {
+    /**
+     * @param {"append" | "insert" | "remove"} type
+     */
+    signalModule(type) {
         let cidx = this.parent.index;
         let midx = this.index;
 
-        if (this.#attached) {
-            let removeSignalString = `module -c ${cidx} -r ${midx}`;
-            console.log(removeSignalString);
-        }
-        if (insert) {
+        let signalString = "";
 
-            let insertSignalString = `module -c ${cidx} -i ${midx} ${this.signature
-                }`;
-            console.log(insertSignalString);
-            this.#attached = true;
+        switch (type) {
+            case "append":
+                signalString = `module -c ${cidx} -a ${this.signature}`;
+                this.#attached = true;
+                break;
+            case "insert":
+                signalString = `module -c ${cidx} -i ${midx} ${this.signature}`;
+                this.#attached = true;
+                break;
+            case "remove":
+                if (!this.#attached) break;
+                signalString = `module -c ${cidx} -r ${midx}`;
+                this.#attached = false;
+                break;
+        }
+
+        if (signalString) {
+            console.log(signalString);
         }
     }
 
@@ -248,25 +276,15 @@ export class IntercomModuleElement extends IntercomBaseElement {
     }
 
     remove() {
-        this.signalModule(false);
+        this.signalModule("remove");
         super.remove();
     }
-
-    // get parent(){
-    //     return super.parent
-    // }
-    // /**@param {IntercomChainElement} parent */
-    // set parent(parent){
-    //     super.parent = parent
-    // }
 
     connectedCallback() {
         let chainParent = this.closest("com-chain");
         if (chainParent) {
             this.parent = chainParent;
-
-            waitForDomUpdate().then(s => this.signalModule())
         }
     }
-    disconnectedCallback() { }
+    disconnectedCallback() {}
 }

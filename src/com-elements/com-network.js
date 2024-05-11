@@ -17,6 +17,13 @@ export class IntercomNetworkElement extends IntercomBaseElement {
         this.#attachListeners();
     }
 
+    createChain() {
+        const newChain = document.createElement("com-chain");
+        newChain.parent = this;
+        this.appendChild(newChain);
+        return newChain
+    }
+
     #attachListeners() {
         this.addEventListener("contextmenu", this.#handleContext.bind(this));
     }
