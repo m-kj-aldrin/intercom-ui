@@ -275,7 +275,7 @@ export class IntercomModuleElement extends IntercomBaseElement {
             let midx = this.index;
             let pidx = +inputOrderAttr;
 
-            let signalString = `parameter -m ${cidx}:${midx} -v${pidx}:${inputElement.value}`;
+            let signalString = `parameter -m ${cidx}:${midx} -v${pidx}:${inputElement.normalValue}`;
 
             console.log(signalString);
         }
